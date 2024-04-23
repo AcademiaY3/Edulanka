@@ -1,10 +1,10 @@
 import Notification from "../Model/NotiModel.js";
 import response from "../Utils/ResponseHandler/ResponseHandler.js";
 import ResTypes from "../Utils/Constants/ResTypes.js";
-import SmsRegisterTemp from "../Utils/Brokers/Sms/SmsRegisterTemp.js";
-import registerEmailTemplate from "../Utils/Brokers/Email/RegisterTemplate.js";
-import EmailSender from "../Utils/Brokers/Email/EmailSender.js";
-import SmsSender from "../Utils/Brokers/Sms/SmsSender.js";
+import SmsRegisterTemp from "../Helpers/Brokers/Sms/SmsRegisterTemp.js";
+import registerEmailTemplate from "../Helpers/Brokers/Email/RegisterTemplate.js";
+import EmailSender from "../Helpers/Brokers/Email/EmailSender.js";
+import SmsSender from "../Helpers/Brokers/Sms/SmsSender.js";
 import RabbitRes from "../Utils/Constants/RabbitRes.js";
 
 class NotiController {

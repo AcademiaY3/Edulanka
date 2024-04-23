@@ -1,5 +1,5 @@
 import axios from 'axios';
-import RabbitRes from '../../Constants/RabbitRes.js';
+import RabbitRes from '../../../Utils/Constants/RabbitRes.js';
 
 class SmsSender {
     constructor() {
@@ -25,10 +25,11 @@ class SmsSender {
                     }
                 };
                 const response = await axios.post(url, data, config);
-                resolve(RabbitRes('success', 200, { message: "SMS Sent Successfully" }));
+                console.log("SMS Sent Successfully to :"+mobile)
+                // resolve(RabbitRes('success', 200, { message: "SMS Sent Successfully" }));
             } catch (error) {
                 console.error(error);
-                reject(RabbitRes('error', 403, { message: "SMS sending failed: " + error }));
+                // reject(RabbitRes('error', 403, { message: "SMS sending failed: " + error }));
             }
         });
     }

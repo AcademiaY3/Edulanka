@@ -1,6 +1,5 @@
 import RabbitCon from '../../Config/Connections/RabbitCon.js'
 import AuthController from '../../Controller/Auth/AuthController.js'
-import VerfiyToken from '../../Helpers/Token/VerfiyToken.js'
 import RabbitRes from '../../Utils/Constants/RabbitRes.js'
 
 const ValidateToken = async () => {
@@ -16,17 +15,9 @@ const ValidateToken = async () => {
             const token = JSON.parse(msg.content.toString())
             // console.log(`Received authentication request: ${JSON.stringify(token)}`);
             console.log(`Received authentication request`);
-            // resolve the promise from verify token
-            try {
-                const userId = await VerfiyToken(token)
-                //find user in auth
-                response = await AuthController.getAuth(userId)
-                console.log(`${userId} ${JSON.stringify(response)}`)
-            } catch (error) {
-                console.log(error)
-                response=RabbitRes('error', 500, { authenticated: false, message: error })
-            }
 
+            const userId = token
+            response = await AuthController.getAuth(userId)
             channel.sendToQueue(msg.properties.replyTo, Buffer.from(JSON.stringify(response)), {
                 correlationId: msg.properties.correlationId
             })
@@ -35,7 +26,8 @@ const ValidateToken = async () => {
 
     } catch (error) {
         console.error('Error consuming messages in Authentication Service:', error);
-        throw error;
+        // throw error;
+        return RabbitRes('error', 500, { authenticated: false, message: error.message })
     }
 }
 export default ValidateToken

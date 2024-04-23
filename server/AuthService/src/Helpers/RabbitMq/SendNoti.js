@@ -23,7 +23,7 @@ const SendNoti = async (user, sectoken,email,telephone) => {
 
         const validatePromise = new Promise((resolve, reject) => {
             const timeOut = setTimeout(() => {
-                reject({ 'message': 'API couldnt Full Fill Request' })
+                reject({ 'message': 'Notification Service UnderMaintenance' })
             }, 8000)
             channel.consume(replyQueue.queue, (msg) => {
                 if (msg.properties.correlationId === correlationId) {

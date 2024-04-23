@@ -1,5 +1,5 @@
 import nodemailer from 'nodemailer';
-import RabbitRes from '../../Constants/RabbitRes.js';
+import RabbitRes from '../../../Utils/Constants/RabbitRes.js';
 
 class EmailSender {
     constructor() {
@@ -37,12 +37,12 @@ class EmailSender {
     async handleEmailSuccess(email, saveOrUpdate) {
         console.log('Email sent successfully to:', email);
         saveOrUpdate();
-        return RabbitRes('success', 200, { message: "Email Sent to " + email });
+        // return RabbitRes('success', 200, { message: "Email Sent to " + email });
     }
 
     handleEmailError(err) {
         console.log(err);
-        return RabbitRes('error', 403, { message: "Email sending error: " + err });
+        // return RabbitRes('error', 403, { message: "Email sending error: " + err });
     }
 }
 

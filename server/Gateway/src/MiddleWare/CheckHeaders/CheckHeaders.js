@@ -9,17 +9,18 @@ const checkHeaders = async (req, res, next) => {
         const authHeader = req.headers.authorization
         const authRole = req.headers.role
         const token = authHeader.split(" ")[1]
+        
         if (!authHeader) {
-            return response(res, 404, {message:'errors.missing_auth_header'})
+            return response(res, 404, {message:'missing_auth_header'})
         }
         if (!authRole) {
-            return response(res, 404, {message:'errors.missing_role_header'})
+            return response(res, 404, {message:'missing_role_header'})
         }
         if (!token) {
-            return response(res, 404, {message:'errors.missing_token'})
+            return response(res, 404, {message:'missing_token'})
         }
         if (!roles.includes(authRole.toLowerCase())) {
-            return response(res, 403, {message:'errors.not_found_role'})
+            return response(res, 403, {message:'not_found_role'})
         }
         next()
     } catch (error) {
