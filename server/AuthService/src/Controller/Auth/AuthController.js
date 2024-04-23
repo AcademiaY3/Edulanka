@@ -46,7 +46,7 @@ class AuthController {
                 return response(res, 403, { message: 'error creating user' })
             else if (savedUser) {
                 // Send notification
-                const notiResponse = await SendNoti(savedUser, token);
+                const notiResponse = await SendNoti(savedUser._id, token,savedUser.email,savedUser.telephone);
                 // Handle notification response
                 if (notiResponse && notiResponse.sent_status === 'success') {
                     return response(res, 200, { message: 'User created successfully' });

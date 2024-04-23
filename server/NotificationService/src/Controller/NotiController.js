@@ -23,20 +23,23 @@ class NotiController {
                 notiEmail: registerEmailTemplate(token)
             };
 
+            const emailRes = await EmailSender.sendEmail(email, registerEmailTemplate(token), 'Register Email', () => {
+            })
+            const smsRes = await SmsSender.sendSms(telephone, SmsRegisterTemp(token))//sent_statusshows success or not
+
             const sendRegisterNotification = new Notification({
                 user: user,
                 recipient: recipientDetails,
                 body: bodyDetails,
-                noti_for: 'Register Confiramtion'
+                noti_for: 'Register Confiramtion',
+                sms_status: smsRes.sent_status,
+                email_status:emailRes.sent_status
             })
             const savedNoti = await sendRegisterNotification.save()
             if (!savedNoti) {
                 return RabbitRes('error', 403, { message: "Failed to save notification" })
             }
-            
-            await EmailSender.sendEmail(email, registerEmailTemplate(token), 'Register Email', () => {
-            })
-            await SmsSender.sendSms(telephone, SmsRegisterTemp(token))
+
             return RabbitRes('success', 200, { message: 'notification sent successfully' })
         } catch (error) {
             console.log(error)

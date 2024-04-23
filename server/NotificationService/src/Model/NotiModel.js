@@ -6,7 +6,7 @@ const notiSchema = new mongoose.Schema(
             type: Schema.Types.Mixed,
             required: true
         },
-        recipient:{
+        recipient: {
             recipientSms: {
                 type: String,
                 // required: true,
@@ -30,6 +30,14 @@ const notiSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
+        sms_status: {
+            type: String,
+            required: true,
+        },
+        email_status: {
+            type: String,
+            required: true,
+        }
     },
     {
         versionKey: '__v',

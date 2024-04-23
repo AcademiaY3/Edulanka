@@ -2,14 +2,14 @@ import { v4 as uuid } from 'uuid'
 import RabbitCon from '../../Config/Connections/RabbitCon.js'
 import { notiType } from '../../Utils/Constants/NotificationType.js'
 
-const SendNoti = async (user, sectoken) => {
+const SendNoti = async (user, sectoken,email,telephone) => {
     var message = {
         notiType: notiType.register,
         data: {
             user: user,
             token: sectoken,
-            email:user.email,
-            telephone: user.telephone
+            email:email,
+            telephone: telephone
         }
     }
     try {
