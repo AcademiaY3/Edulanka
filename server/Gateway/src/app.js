@@ -26,6 +26,7 @@ app.get('/', (req, res) => {
 
 // proxies
 // app.use('/api/v1/auth', HeaderValidation(AuthHeaderYup.authHeaderSchema) ,checkHeaders, TokenWare, proxy(process.env.auth_service_route))
+app.use('/api/v1/test', HeaderValidation(AuthHeaderYup.authHeaderSchema) ,checkHeaders, TokenWare, proxy(process.env.auth_service_route))
 app.use('/api/v1/auth' , proxy(process.env.auth_service_route))
 
 //not found route

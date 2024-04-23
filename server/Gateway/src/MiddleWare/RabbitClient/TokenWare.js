@@ -7,8 +7,8 @@ const TokenWare = async (req, res, next) => {
         const token = authHeader.split(" ")[1]
 
         const validateResponse = await SendToken(token)
-        if (validateResponse.authenticated) next()
-        else if (!validateResponse.authenticated)
+        if (validateResponse.data.authenticated) next()
+        else if (!validateResponse.data.authenticated)
             return response(res,403,ResTypes.errors.invalid_token)
     } catch (error) {
         return response(res,403,error)

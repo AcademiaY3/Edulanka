@@ -4,6 +4,7 @@ import ResTypes from "../../Utils/Constants/ResTypes.js";
 import bcrypt from 'bcryptjs'
 import SendNoti from "../../Helpers/RabbitMq/SendNoti.js";
 import RabbitRes from "../../Utils/Constants/RabbitRes.js";
+import generateToken from '../../Helpers/Token/Token.js'
 
 class AuthController {
     // test api
@@ -15,11 +16,10 @@ class AuthController {
         try {
             const user = await Auth.findOne({ _id: id })
             if (!user) {
-                RabbitRes('error', 404, { authenticated: false, message: "no user found" })
+                return RabbitRes('error', 404, { authenticated: false, message: "no user found" })
             } else {
-                RabbitRes('success', 404, { authenticated: true, user })
+                return RabbitRes('success', 200, { authenticated: true, user })
             }
-            return RabbitRes
         } catch (error) {
             console.log(error)
             return RabbitRes('error', 500, { authenticated: false, message: error })
@@ -31,7 +31,7 @@ class AuthController {
         const { name, email, password, telephone, role } = req.body;
         try {
             const existing = await Auth.findOne({ email })
-            if (existing) return response(res, 403,{message:"user exists"})
+            if (existing) return response(res, 403, { message: "user exists" })
 
             const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -46,12 +46,12 @@ class AuthController {
                 return response(res, 403, { message: 'error creating user' })
             else if (savedUser) {
                 // Send notification
-                const notiResponse = await SendNoti(savedUser._id, token,savedUser.email,savedUser.telephone);
+                const notiResponse = await SendNoti(savedUser._id, token, savedUser.email, savedUser.telephone);
                 // Handle notification response
                 if (notiResponse && notiResponse.sent_status === 'success') {
                     return response(res, 200, { message: 'User created successfully' });
                 } else {
-                    return response(res, 403, { message: 'Failed to send notification',user });
+                    return response(res, 403, { message: 'Failed to send notification', user });
                 }
             }
         } catch (error) {
@@ -78,26 +78,26 @@ class AuthController {
     //     }
     // }
     //create SignIn
-    // signIn = async (req, res) => {
-    //     const { email, password, role } = req.body;
+    signIn = async (req, res) => {
+        const { email, password, role } = req.body;
 
-    //     try {
-    //         const user = await Auth.findOne({ email, role })
-    //         if (!user) {
-    //             return response(res, 404, ResTypes.errors.no_user);
-    //         }
-    //         const isVerified = user.isVerfied
-    //         if (!isVerified) return response(res, 403, ResTypes.errors.not_verified)
-    //         const isMatch = await bcrypt.compare(password, user.password);
-    //         if (!isMatch) {
-    //             return response(res, 403, ResTypes.errors.invalid_password)
-    //         }
-    //         const token = generateToken(user)
-    //         return response(res, 200, { token, role, ...ResTypes.successMessages.login_successful })
-    //     } catch (error) {
-    //         return response(res, 500, error)
-    //     }
-    // }
+        try {
+            const user = await Auth.findOne({ email, role })
+            if (!user) {
+                return response(res, 404, {message:'no user found'});
+            }
+            const isVerified = user.isVerfied
+            if (!isVerified) return response(res, 403, {message:'user email not verified'})
+            const isMatch = await bcrypt.compare(password, user.password);
+            if (!isMatch) {
+                return response(res, 403, {message:'incorret password'})
+            }
+            const token = generateToken(user)
+            return response(res, 200, { token, role, message:'Login Successfull'})
+        } catch (error) {
+            return response(res, 500, error)
+        }
+    }
     // create reset-password
     // resetPassword = async (req, res) => {
     //     const { email } = req.body;

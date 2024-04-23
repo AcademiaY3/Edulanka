@@ -1,5 +1,6 @@
 import RabbitCon from '../../Config/Connections/RabbitCon.js'
 import AuthController from '../../Controller/Auth/AuthController.js'
+import VerfiyToken from '../../Helpers/Token/VerfiyToken.js'
 
 const ValidateToken = async () => {
     var response = {}
@@ -10,11 +11,14 @@ const ValidateToken = async () => {
 
         console.log(`Authentication Service is waiting for messages. To exit, press CTRL+C`);
 
-        channel.consume(queue, (msg) => {
-            const userId = JSON.parse(msg.content.toString())
-            console.log(`Received authentication request: ${JSON.stringify(userId)}`);
+        channel.consume(queue, async(msg) => {
+            const token = JSON.parse(msg.content.toString())
+            console.log(`Received authentication request: ${JSON.stringify(token)}`);
+            // get id from the token
+            const userId = await VerfiyToken(token)
             //find user in auth
-            response = AuthController.getAuth(userId)
+            response = await AuthController.getAuth(userId)
+            console.log(`${userId} ${JSON.stringify(response)}`)
 
             channel.sendToQueue(msg.properties.replyTo, Buffer.from(JSON.stringify(response)), {
                 correlationId: msg.properties.correlationId
