@@ -18,7 +18,8 @@ const SendToken = async (token) => {
             channel.consume(replyQue.queue, (message) => {
                 if (message.properties.correlationId === correlationId) {
                     const userValidated = JSON.parse(message.content.toString())
-                    console.log(`Received validation response: ${JSON.stringify(userValidated)}`);
+                    // console.log(`Received validation response: ${JSON.stringify(userValidated)}`);
+                    console.log(`Received validation response`);
                     clearTimeout(timeout)
                     resolve(userValidated)
                 } else {
@@ -32,7 +33,8 @@ const SendToken = async (token) => {
             correlationId: correlationId,
             replyTo: replyQue.queue
         })
-        console.log(`Message sent to Auth Queue: ${JSON.stringify(token)}`);
+        // console.log(`Message sent to Auth Queue: ${JSON.stringify(token)}`);
+        console.log(`Message sent to Auth Queue`);
         return validatePromise;
     } catch (error) {
         console.error(error)

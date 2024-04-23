@@ -12,13 +12,11 @@ const VerifyToken = (token) => {
             const userId = await Auth.findOne({ _id: decode.id });
 
             if (!userId) {
-                reject('error: no user found');
-                return;
+                reject('no user found' );
             }
-            resolve(userId._id.toString()); 
+            resolve(userId._id.toString());
         } catch (err) {
-            console.error("Error verifying token:", err);
-            reject(err.message); 
+            reject(err.message);
         }
     });
 };
