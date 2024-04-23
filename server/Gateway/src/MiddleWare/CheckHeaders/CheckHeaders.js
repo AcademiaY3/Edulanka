@@ -2,18 +2,10 @@ import { roles } from '../../Utils/Constants/Roles.js'
 import ResTypes from '../../Utils/ResponseHandler/ResponseHandler.js'
 import response from '../../Utils/ResponseHandler/ResponseHandler.js'
 import AuthHeaderYup from '../../Utils/Validation/AuthHeaderYup.js'
-import HeaderValidation from '../YupSchema/HeaderValidation.js'
 
 const checkHeaders = async (req, res, next) => {
 
     try {
-        //validate schema
-        const validationResult = await HeaderValidation(AuthHeaderYup.authHeaderSchema)(req, res, next);
-
-        if (validationResult) {
-            return validationResult;
-        }
-
         const authHeader = req.headers.authorization
         const authRole = req.headers.role
         const token = authHeader.split(" ")[1]

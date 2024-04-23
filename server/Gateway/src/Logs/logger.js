@@ -35,7 +35,7 @@ const logger = (req, res, next) => {
                 options: {
                     useUnifiedTopology: true
                 },
-                collection: 'logs'
+                collection: 'gateway_log'
             })
         ],
     })

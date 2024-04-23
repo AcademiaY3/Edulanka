@@ -8,6 +8,8 @@ import TokenWare from "./MiddleWare/RabbitClient/TokenWare.js";
 import response from "./Utils/ResponseHandler/ResponseHandler.js";
 import ResTypes from "./Utils/Constants/ResTypes.js";
 import checkHeaders from "./Middleware/CheckHeaders/CheckHeaders.js";
+import HeaderValidation from "./MiddleWare/YupSchema/HeaderValidation.js";
+import AuthHeaderYup from "./Utils/Validation/AuthHeaderYup.js";
 
 
 dotenv.config()
@@ -23,7 +25,8 @@ app.get('/', (req, res) => {
 })
 
 // proxies
-app.use('/auth', checkHeaders, TokenWare, proxy(process.env.auth_service_route))
+// app.use('/api/v1/auth', HeaderValidation(AuthHeaderYup.authHeaderSchema) ,checkHeaders, TokenWare, proxy(process.env.auth_service_route))
+app.use('/api/v1/auth' , proxy(process.env.auth_service_route))
 
 //not found route
 app.use((req, res) => {
