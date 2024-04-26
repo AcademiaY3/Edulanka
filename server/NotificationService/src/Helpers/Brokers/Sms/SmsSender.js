@@ -26,10 +26,10 @@ class SmsSender {
                 };
                 const response = await axios.post(url, data, config);
                 console.log("SMS Sent Successfully to :"+mobile)
-                // resolve(RabbitRes('success', 200, { message: "SMS Sent Successfully" }));
+                resolve(RabbitRes('success', 200, { message: "SMS Sent Successfully" }));
             } catch (error) {
                 console.error(error);
-                // reject(RabbitRes('error', 403, { message: "SMS sending failed: " + error }));
+                reject(RabbitRes('error', 403, { message: "SMS sending failed: " + error }));
             }
         });
     }

@@ -6,6 +6,7 @@ import SendNoti from "../../Helpers/RabbitMq/SendNoti.js";
 import RabbitRes from "../../Utils/Constants/RabbitRes.js";
 import generateToken from '../../Helpers/Token/Token.js'
 import successEmailTemplate from "../../Utils/Constants/SuccessRegister.js";
+import { notiType } from "../../Utils/Constants/NotificationType.js";
 
 class AuthController {
     // test api
@@ -41,19 +42,19 @@ class AuthController {
             const registerExpire = Date.now() + 360000
 
             const user = new Auth({ name, email, password: hashedPassword, role, telephone, verifyRegisterToken, registerExpire })
-            //send the mail , when sending also sent the whole user object
-            const savedUser = await user.save()
-            if (!savedUser)
-                return response(res, 403, { message: 'error creating user' })
-            else if (savedUser) {
-                // Send notification
-                const notiResponse = await SendNoti(savedUser._id, token, savedUser.email, savedUser.telephone);
-                // Handle notification response
-                if (notiResponse && notiResponse.sent_status === 'success') {
-                    return response(res, 200, { message: 'User created successfully' });
+            // Send notification
+            const notiResponse = await SendNoti(user._id, token, user.email, user.telephone, notiType.register);
+            // Handle notification response
+            if (notiResponse && notiResponse.sent_status === 'success') {
+                // Save the user
+                const savedUser = await user.save();
+                if (!savedUser) {
+                    return response(res, 403, { message: 'Error creating user' });
                 } else {
-                    return response(res, 403, { message: 'Failed to send notification', user });
+                    return response(res, 200, { message: 'User created successfully' });
                 }
+            } else {
+                return response(res, 403, { message: 'Failed to send notification', user });
             }
         } catch (error) {
             console.log(error)
@@ -99,29 +100,35 @@ class AuthController {
         }
     }
     // create reset-password
-    // resetPassword = async (req, res) => {
-    //     const { email } = req.body;
-    //     try {
-    //         const user = await Auth.findOne({ email })
-    //         if (!user) {
-    //             return response(res, 403, ResTypes.errors.user_exists)
-    //         }
-    //         const token = Math.random().toString(36).slice(-8)
-    //         const expireDate = Date.now() + 360000
-    //         EmailSender.sendVerificationEmail(user, token, passwordReset(token), "Password Reset", async () => {
-    //             const result = await Auth.updateOne(
-    //                 { email },
-    //                 { $set: { resetPasswordToken: token, resetPasswordExpire: expireDate } }
-    //             )
-    //             if (!result) {
-    //                 return response(res, 500, ResTypes.errors.failed_operation)
-    //             }
-    //         }, res)
-    //     } catch (error) {
-    //         console.log(error)
-    //         return response(res, 500, { message: error })
-    //     }
-    // }
+    resetPassword = async (req, res) => {
+        const { email } = req.body;
+        try {
+            const user = await Auth.findOne({ email })
+            if (!user) {
+                return response(res, 403, { message: 'no user exists' })
+            }
+            const token = Math.random().toString(36).slice(-8)
+            const expireDate = Date.now() + 360000
+            // Send notification
+            const notiResponse = await SendNoti(user._id, token, user.email, user.telephone, notiType.resetPassword);
+            // Handle notification response
+            if (notiResponse && notiResponse.sent_status === 'success') {
+                const result = await Auth.updateOne(
+                    { email },
+                    { $set: { resetPasswordToken: token, resetPasswordExpire: expireDate } }
+                )
+                if (!result) {
+                    return response(res, 500, { message: 'failed verification generation' })
+                }
+                return response(res, 200, { message: 'verification successfully sent' });
+            } else {
+                return response(res, 403, { message: 'Failed to send notification', user });
+            }
+        } catch (error) {
+            console.log(error)
+            return response(res, 500, { message: error })
+        }
+    }
     // verify reset-password with token
     // verifyResetPassword = async (req, res) => {
     //     const { token } = req.params

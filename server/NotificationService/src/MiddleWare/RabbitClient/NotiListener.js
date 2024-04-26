@@ -11,21 +11,26 @@ const NotiListener = async () => {
 
         console.log(`Notification Service is waiting for messages. To exit, press CTRL+C`);
 
-        channel.consume(queue, async(msg) => {
+        channel.consume(queue, async (msg) => {
             const notiMsg = JSON.parse(msg.content.toString())
-            
+
             // console.log(`Received notification request: ${JSON.stringify(notiMsg.notiType)}`);
             console.log(`Received notification request`);
 
             if (notiMsg.notiType === notiType.register) {
-                response =await NotiController.sendRegisterNotification(
+                response = await NotiController.sendRegisterNotification(
                     notiMsg.data.user,
                     notiMsg.data.token,
                     notiMsg.data.email,
                     notiMsg.data.telephone,
                 )
             } else if (notiMsg.notiType === notiType.resetPassword) {
-                //reset logiv
+                response = await NotiController.sendResetPassNotification(
+                    notiMsg.data.user,
+                    notiMsg.data.token,
+                    notiMsg.data.email,
+                    notiMsg.data.telephone,
+                )
             }
             channel.sendToQueue(msg.properties.replyTo, Buffer.from(JSON.stringify(response)), {
                 correlationId: msg.properties.correlationId

@@ -1,10 +1,9 @@
 import { v4 as uuid } from 'uuid'
 import RabbitCon from '../../Config/Connections/RabbitCon.js'
-import { notiType } from '../../Utils/Constants/NotificationType.js'
 
-const SendNoti = async (user, sectoken,email,telephone) => {
+const SendNoti = async (user, sectoken,email,telephone,type) => {
     var message = {
-        notiType: notiType.register,
+        notiType: type,
         data: {
             user: user,
             token: sectoken,
@@ -24,18 +23,19 @@ const SendNoti = async (user, sectoken,email,telephone) => {
         const validatePromise = new Promise((resolve, reject) => {
             const timeOut = setTimeout(() => {
                 reject({ 'message': 'Notification Service UnderMaintenance' })
-            }, 8000)
+            }, 10000)
             channel.consume(replyQueue.queue, (msg) => {
                 if (msg.properties.correlationId === correlationId) {
                     const notiMsg = JSON.parse(msg.content.toString())
                     // console.log(`Received notification response: ${JSON.stringify(notiMsg)}`);
                     console.log(`Received notification response`);
                     clearTimeout(timeOut)
+                    channel.ack(msg); // Manually acknowledge the message
                     resolve(notiMsg)
                 } else {
                     reject({ 'message': 'Response Data 404' })
                 }
-            }, { noAck: true })
+            }, { noAck: false })
         })
 
         channel.sendToQueue(queue, Buffer.from(JSON.stringify(message)), {
