@@ -5,6 +5,7 @@ import bcrypt from 'bcryptjs'
 import SendNoti from "../../Helpers/RabbitMq/SendNoti.js";
 import RabbitRes from "../../Utils/Constants/RabbitRes.js";
 import generateToken from '../../Helpers/Token/Token.js'
+import successEmailTemplate from "../../Utils/Constants/SuccessRegister.js";
 
 class AuthController {
     // test api
@@ -60,23 +61,22 @@ class AuthController {
         }
     }
     //email verify endpoint
-    // verifyEmail = async (req, res) => {
+    verifyEmail = async (req, res) => {
 
-    //     const { token } = req.params
-    //     let user = await Auth.findOne({ verifyRegisterToken: token })
-    //     if (!user) return response(res, 403, ResTypes.errors.invalid_token);
-    //     if (new Date(user.registerExpire) < new Date()) return response(res, 403, ResTypes.errors.cancelled_token)
+        const { token } = req.params
+        let user = await Auth.findOne({ verifyRegisterToken: token })
+        if (!user) return response(res, 403, ResTypes.errors.invalid_token);
+        if (new Date(user.registerExpire) < new Date()) return response(res, 403, ResTypes.errors.cancelled_token)
 
-    //     const result = await Auth.updateOne(
-    //         { verifyRegisterToken: token },
-    //         { $set: { isVerfied: true, verifyRegisterToken: "verified", registerExpire: "" } }
-    //     )
-    //     if (result) {
-    //         return res.status(201).send(successEmailTemplate())
-    //     } else {
-    //         return response(res, 403, ResTypes.errors.unverified_user)
-    //     }
-    // }
+        const result = await Auth.updateOne(
+            { verifyRegisterToken: token },
+            { $set: { isVerfied: true, verifyRegisterToken: "verified", registerExpire: "" } }
+        )
+        if (result.modifiedCount === 0) {
+            return response(res, 403, { message: 'Not verified' })
+        }
+        return res.status(201).send(successEmailTemplate())
+    }
     //create SignIn
     signIn = async (req, res) => {
         const { email, password, role } = req.body;
@@ -84,16 +84,16 @@ class AuthController {
         try {
             const user = await Auth.findOne({ email, role })
             if (!user) {
-                return response(res, 404, {message:'no user found'});
+                return response(res, 404, { message: 'no user found' });
             }
             const isVerified = user.isVerfied
-            if (!isVerified) return response(res, 403, {message:'user email not verified'})
+            if (!isVerified) return response(res, 403, { message: 'user email not verified' })
             const isMatch = await bcrypt.compare(password, user.password);
             if (!isMatch) {
-                return response(res, 403, {message:'incorret password'})
+                return response(res, 403, { message: 'incorret password' })
             }
             const token = generateToken(user)
-            return response(res, 200, { token, role, message:'Login Successfull'})
+            return response(res, 200, { token, role, message: 'Login Successfull' })
         } catch (error) {
             return response(res, 500, error)
         }
