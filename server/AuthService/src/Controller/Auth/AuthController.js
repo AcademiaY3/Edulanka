@@ -27,7 +27,6 @@ class AuthController {
             return RabbitRes('error', 500, { authenticated: false, message: error })
         }
     }
-
     //create SignUp
     signUp = async (req, res) => {
         const { name, email, password, telephone, role } = req.body;
@@ -130,31 +129,31 @@ class AuthController {
         }
     }
     // verify reset-password with token
-    // verifyResetPassword = async (req, res) => {
-    //     const { token } = req.params
-    //     const { password } = req.body
-    //     try {
-    //         if (!token) return response(res, 404, ResTypes.errors.missing_token)
+    verifyResetPassword = async (req, res) => {
+        const { token } = req.params
+        const { password } = req.body
+        try {
+            if (!token) return response(res, 404, ResTypes.errors.missing_token)
 
-    //         const user = await Auth.findOne({ resetPasswordToken: token })
-    //         if (!user) return response(res, 404, ResTypes.errors.invalid_token)
+            const user = await Auth.findOne({ resetPasswordToken: token })
+            if (!user) return response(res, 404, ResTypes.errors.invalid_token)
 
-    //         const tokenExpire = await Auth.findOne({ resetPasswordExpire: { $gt: Date.now() } })
-    //         if (!tokenExpire) return response(res, 404, ResTypes.errors.token_expired)
+            const tokenExpire = await Auth.findOne({ resetPasswordExpire: { $gt: Date.now() } })
+            if (!tokenExpire) return response(res, 404, ResTypes.errors.token_expired)
 
-    //         const hashedPasswod = await bcrypt.hash(password, 10)
-    //         const result = await Auth.updateOne(
-    //             { resetPasswordToken: token },
-    //             { $set: { resetPasswordToken: "", resetPasswordExpire: "", password: hashedPasswod } }
-    //         )
-    //         if (result.modifiedCount === 0) {
-    //             return response(res, 500, ResTypes.errors.failed_operation)
-    //         }
-    //         return response(res, 201, ResTypes.successMessages.password_reseted)
-    //     } catch (error) {
-    //         return response(res, 500, { message: error })
-    //     }
-    // }
+            const hashedPasswod = await bcrypt.hash(password, 10)
+            const result = await Auth.updateOne(
+                { resetPasswordToken: token },
+                { $set: { resetPasswordToken: "", resetPasswordExpire: "", password: hashedPasswod } }
+            )
+            if (result.modifiedCount === 0) {
+                return response(res, 500, {message:'failed token generation'})
+            }
+            return response(res, 201, {message:'password reset successfull'})
+        } catch (error) {
+            return response(res, 500, { message: error })
+        }
+    }
 }
 
 export default AuthController = new AuthController
