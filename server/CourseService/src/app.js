@@ -5,6 +5,8 @@ import corsOption from "./Config/Cors/CorsConfig.js";
 import logger from "./Logs/logger.js";
 import response from './Utils/ResponseHandler/ResponseHandler.js'
 import db from "./Config/Connections/db.js";
+import Courseroute from './Routes/Course/CourseRoute.js'
+
 
 dotenv.config()
 const app = express()
@@ -19,7 +21,7 @@ app.get('/', (req, res) => {
 })
 
 //routes init
-// app.use('/service',AuthRoute)
+app.use('/service',Courseroute)
 
 app.use('/*',(req, res) => {
     return response(res, 404, { message:'route not found'})
