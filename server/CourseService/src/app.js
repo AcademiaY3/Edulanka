@@ -29,5 +29,5 @@ app.use('/*',(req, res) => {
 
 app.listen(PORT, () => {
     db()
-    console.log(`Notification Server is listening on ${PORT}`);
+    console.log(`Course Server is listening on ${PORT}`);
 })
