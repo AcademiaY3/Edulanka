@@ -5,11 +5,7 @@ import response from "../../Utils/ResponseHandler/ResponseHandler.js";
 class CourseController {
     // Method to add a new course
     addCourse = async (req, res) => {
-        let session = null;
         try {
-            // Start a MongoDB session
-            session = await mongoose.startSession();
-            session.startTransaction();
 
             // Extract data from request body
             const { name, title, price, category, hours, skills, language, certificate, thumbnail, description, tag, instructor, lectures, approved, approved_by } = req.body;
@@ -34,19 +30,13 @@ class CourseController {
 
             // Save the course to the database
             const savedCourse = await newCourse.save();
-
-            // Commit the transaction
-            await session.commitTransaction();
-            session.endSession();
-
-            return response(res, 200, {message:'course added'});
+            if (savedCourse)
+                return response(res, 200, { message: 'course added' });
+            else
+                return response(res, 403, { message: 'course adding failed' });
         } catch (error) {
-            if (session) {
-                await session.abortTransaction();
-                session.endSession();
-            }
             console.log(error);
-            return response(res, 500, error);
+            return response(res, 500, {error:error.message});
         }
     }
 
@@ -55,11 +45,11 @@ class CourseController {
         const { courseId } = req.params;
         try {
             const course = await Course.findById(courseId);
-            if (!course) return response(res, 404, {message:'course not found'});
+            if (!course) return response(res, 404, { message: 'course not found' });
             return response(res, 200, course);
         } catch (error) {
             console.log(error);
-            return response(res, 500, error);
+            return response(res, 500, {error:error.message});
         }
     }
 
@@ -67,43 +57,28 @@ class CourseController {
     getAllCourses = async (req, res) => {
         try {
             const courses = await Course.find({});
-            if (!courses) return response(res, 404, {message:'course not found'});
+            if (!courses) return response(res, 404, { message: 'course not found' });
             return response(res, 200, { courses });
         } catch (error) {
             console.log(error);
-            return response(res, 500, error);
+            return response(res, 500, {error:error.message});
         }
     }
 
     // Method to delete a course by ID
     deleteCourse = async (req, res) => {
-        const { courseId } = req.params;
-        let session = null;
+        // const { courseId } = req.params;
+        const { courseId } = req.body;
         try {
-            // Start a MongoDB session
-            session = await mongoose.startSession();
-            session.startTransaction();
-
             // Delete the course
             const deletedCourse = await Course.findByIdAndDelete(courseId);
-            if (!deletedCourse) {
-                await session.abortTransaction();
-                session.endSession();
-                return response(res, 404, {message:'course delete error'});
-            }
+            if (!deletedCourse)
+                return response(res, 404, { message: 'course deletion error not found' });
 
-            // Commit the transaction
-            await session.commitTransaction();
-            session.endSession();
-
-            return response(res, 200,{message:'course deleted successfully'});
+            return response(res, 200, { message: 'course deleted successfully' });
         } catch (error) {
-            if (session) {
-                await session.abortTransaction();
-                session.endSession();
-            }
             console.log(error);
-            return response(res, 500, error);
+            return response(res, 500, { error: error.message });
         }
     }
 
@@ -113,11 +88,11 @@ class CourseController {
         const updateData = req.body;
         try {
             const updatedCourse = await Course.findByIdAndUpdate(courseId, updateData, { new: true });
-            if (!updatedCourse) return response(res, 404, {message:'course not found'});
+            if (!updatedCourse) return response(res, 404, { message: 'course not found' });
             return response(res, 200, updatedCourse);
         } catch (error) {
             console.log(error);
-            return response(res, 500, error.mesage);
+            return response(res, 500, {error:error.message});
         }
     }
 }
