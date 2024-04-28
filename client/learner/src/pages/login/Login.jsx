@@ -12,7 +12,7 @@ export default function Login() {
             <div className="container-fluid">
                 <div className="row">
                     {/* left */}
-                    <div style={{ backgroundColor: 'rgba(255, 133, 27,0.2)' }} className="col-12 col-lg-6 d-md-flex align-items-center justify-content-center bg-opacity-10 vh-lg-100">
+                    <div style={{ backgroundColor: 'rgba(255, 133, 27,0.2)' }} className="d-none d-md-flex col-md-12 col-lg-6 align-items-center justify-content-center bg-opacity-10 vh-lg-100">
                         <div className="p-3 p-lg-5">
                             {/* SVG Image */}
                             <img src={hero} className="d-none d-md-block  mt-0" alt />
@@ -80,7 +80,20 @@ export default function Login() {
                                     {/* Button */}
                                     <div className="align-items-center mt-0">
                                         <div className="d-grid">
-                                            <button className="btn btn-dark mb-0" type="button">Login</button>
+                                            <button className="btn btn-dark mb-0 fs-4 fw-bolder py-1" type="button">Login</button>
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    {/*Instructor Button */}
+                                    <div className="align-items-center mt-4 mb-2">
+                                        <div className="d-grid">
+                                            <button className="btn btn-dark mb-0" type="button">Instructor Login</button>
+                                        </div>
+                                    </div>
+                                    {/*Admin Button */}
+                                    <div className="align-items-center mt-0">
+                                        <div className="d-grid">
+                                            <button className="btn btn-dark mb-0" type="button">Admin Login</button>
                                         </div>
                                     </div>
                                 </form>

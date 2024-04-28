@@ -6,9 +6,9 @@ import ForgotPassword from './ForgotPassword/ForgotPassword'
 export default function Main() {
   return (
     <>
-      {/* <Login/> */}
+      <Login/>
       {/* <Register/> */}
-      <ForgotPassword/>
+      {/* <ForgotPassword/> */}
     </>
   )
 }
