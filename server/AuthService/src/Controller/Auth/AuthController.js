@@ -93,7 +93,7 @@ class AuthController {
                 return response(res, 403, { message: 'incorret password' })
             }
             const token = generateToken(user)
-            return response(res, 200, { token, role, message: 'Login Successfull' })
+            return response(res, 200, { user,token, message: 'Login Successfull' })
         } catch (error) {
             return response(res, 500, error)
         }
