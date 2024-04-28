@@ -12,10 +12,10 @@ router.post("/addCourse", AdminCheck, ValidateScehma(CourseYup.addCourse), Cours
 router.get("/getAllCourses", CourseController.getAllCourses);
 
 // Route to get a course by ID
-router.get("/getCourse/:courseId", CourseController.getCourse);
+router.get("/getCourse/:courseId", AdminCheck,CourseController.getCourse);
 
 // Route to delete a course by ID
-router.delete("/deleteCourse/:courseId", AdminCheck, CourseController.deleteCourse);
+router.post("/deleteCourse", AdminCheck, ValidateScehma(CourseYup.deleteCourse),CourseController.deleteCourse);
 
 // Route to update a course by ID
 router.put("/updateCourse/:courseId", AdminCheck, ValidateScehma(CourseYup.updateCourse), CourseController.updateCourse);
