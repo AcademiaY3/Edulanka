@@ -10,7 +10,7 @@ const SendOrder = async (course_id) => {
     }
     try {
         const { channel } = await RabbitCon.connect()
-        const queue = process.env.ORDER_QUEUE
+        const queue = process.env.ORDER_COURSE_QUEUE
         const correlationId = uuid()
         const replyQueue = await channel.assertQueue(
             '',

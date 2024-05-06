@@ -6,7 +6,7 @@ const OrderListener = async () => {
     var response = {}
     try {
         const { channel } = await RabbitCon.connect()
-        const queue = process.env.ORDER_QUEUE
+        const queue = process.env.ORDER_COURSE_QUEUE
         await channel.assertQueue(queue, { durable: false })
 
         console.log(`Order Service is waiting for messages. To exit, press CTRL+C`);
