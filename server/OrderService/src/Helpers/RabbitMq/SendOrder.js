@@ -1,13 +1,11 @@
 import { v4 as uuid } from 'uuid'
 import RabbitCon from '../../Config/Connections/RabbitCon.js'
 
-const SendOrder = async (course_id, price,course_name) => {
+const SendOrder = async (course_id) => {
     var message = {
         orderType: type,
         data: {
-            course_id: course_id,
-            price: price,
-            course_name:course_name
+            course_id: course_id
         }
     }
     try {
@@ -21,13 +19,13 @@ const SendOrder = async (course_id, price,course_name) => {
 
         const validatePromise = new Promise((resolve, reject) => {
             const timeOut = setTimeout(() => {
-                reject({ 'message': 'Payment Service UnderMaintenance' })
+                reject({ 'message': 'Course Service UnderMaintenance' })
             }, 10000)
             channel.consume(replyQueue.queue, (msg) => {
                 if (msg.properties.correlationId === correlationId) {
                     const orderMsg = JSON.parse(msg.content.toString())
-                    // console.log(`Received Payment response: ${JSON.stringify(orderMsg)}`);
-                    console.log(`Received Payment response`);
+                    // console.log(`Received Course response: ${JSON.stringify(orderMsg)}`);
+                    console.log(`Received Course response`);
                     clearTimeout(timeOut)
                     channel.ack(msg); // Manually acknowledge the message
                     resolve(orderMsg)
@@ -42,8 +40,8 @@ const SendOrder = async (course_id, price,course_name) => {
             correlationId: correlationId,
             replyTo: replyQueue.queue
         })
-        // console.log(`Message sent to Payment Queue: ${JSON.stringify(message)}`);
-        console.log(`Message sent to Payment Queue`);
+        // console.log(`Message sent to Course Queue: ${JSON.stringify(message)}`);
+        console.log(`Message sent to Course Queue`);
         return validatePromise;
     } catch (error) {
         console.error(error)

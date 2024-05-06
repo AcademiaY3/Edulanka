@@ -1,5 +1,5 @@
-import RabbitCon from '../../Config/Connections/RabbitCon.js'
-import NotiController from '../../Controller/NotiController.js'
+import RabbitCon from '../../Config/Connection/RabbitCon.js'
+import OrderController from '../../Controller/Order/OrderController.js'
 // import { notiType } from '../../Utils/Constants/NotificationType.js'
 
 const OrderListener = async () => {
@@ -17,21 +17,10 @@ const OrderListener = async () => {
             // console.log(`Received order request: ${JSON.stringify(orderMsg.notiType)}`);
             console.log(`Received order request`);
 
-            if (orderMsg.notiType === notiType.register) {
-                response = await NotiController.sendRegisterNotification(
-                    orderMsg.data.user,
-                    orderMsg.data.token,
-                    orderMsg.data.email,
-                    orderMsg.data.telephone,
+                response = await OrderController(
+                    orderMsg.data.pay_status
                 )
-            } else if (orderMsg.notiType === notiType.resetPassword) {
-                response = await NotiController.sendResetPassNotification(
-                    orderMsg.data.user,
-                    orderMsg.data.token,
-                    orderMsg.data.email,
-                    orderMsg.data.telephone,
-                )
-            }
+            
             channel.sendToQueue(msg.properties.replyTo, Buffer.from(JSON.stringify(response)), {
                 correlationId: msg.properties.correlationId
             })
