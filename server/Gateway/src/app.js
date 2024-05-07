@@ -2,7 +2,7 @@ import express from "express";
 import dotenv from 'dotenv'
 import cors from 'cors'
 import corsOption from "./Config/CorsConfig.js";
-import logger from "./Logs/logger.js";
+// import logger from "./Logs/logger.js";
 import proxy from 'express-http-proxy'
 import TokenWare from "./MiddleWare/RabbitClient/TokenWare.js";
 import response from "./Utils/ResponseHandler/ResponseHandler.js";
@@ -18,7 +18,7 @@ const PORT = process.env.PORT || 8500
 
 app.use(cors(corsOption))
 app.use(express.json())
-app.use(logger)
+// app.use(logger)
 
 app.get('/', (req, res) => {
     return response(res, 200, ResTypes.successMessages.server_online)
@@ -28,6 +28,9 @@ app.get('/', (req, res) => {
 // app.use('/api/v1/auth', HeaderValidation(AuthHeaderYup.authHeaderSchema) ,checkHeaders, TokenWare, proxy(process.env.auth_service_route))
 app.use('/api/v1/testauth', HeaderValidation(AuthHeaderYup.authHeaderSchema) , TokenWare, proxy(process.env.auth_service_route))
 app.use('/api/v1/auth' , proxy(process.env.auth_service_route))
+app.use('/api/v1/order' , HeaderValidation(AuthHeaderYup.authHeaderSchema) , proxy(process.env.order_service_route))
+app.use('/api/v1/payment' , HeaderValidation(AuthHeaderYup.authHeaderSchema) , TokenWare, proxy(process.env.payment_service_route))
+app.use('/api/v1/course' , HeaderValidation(AuthHeaderYup.authHeaderSchema) , TokenWare, proxy(process.env.course_service_route))
 
 //not found route
 app.use((req, res) => {
