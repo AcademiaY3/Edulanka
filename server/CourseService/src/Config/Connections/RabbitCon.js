@@ -1,10 +1,9 @@
 import amqp from 'amqplib'
 
-
-class RabbitCon{
+class RabbitCon {
     constructor() {
         this.connection = null
-        this.channel=null
+        this.channel = null
     }
     async connect() {
         if (!this.connection) {
@@ -20,9 +19,7 @@ class RabbitCon{
         }
         return {
             connection: this.connection,
-
-            channel:this.channel
-
+            channel: this.channel
         }
     }
 }
