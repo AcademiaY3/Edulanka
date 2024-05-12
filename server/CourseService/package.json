@@ -25,6 +25,7 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.3.2",
     "nodemailer": "^6.9.13",
+    "react-quill": "^2.0.0",
     "uuid": "^9.0.1",
     "winston": "^3.11.0",
     "winston-mongodb": "^5.1.1",
