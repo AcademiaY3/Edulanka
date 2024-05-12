@@ -2,12 +2,7 @@ import * as yup from 'yup';
 
 class PaymentYup {
     addPayment = yup.object({
-        course_id: yup.string().required(),
         order_id: yup.string().required(),
-        instructor_id: yup.string().required(),
-        learner_id: yup.string().required(),
-        amount: yup.number().required(),
-        course_name: yup.string().required(),
         pay_status_message: yup.string().required(),
         pay_status_code: yup.number().required(),
     });

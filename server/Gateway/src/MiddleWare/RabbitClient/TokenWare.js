@@ -21,7 +21,7 @@ const TokenWare = async (req, res, next) => {
             return response(res, 500, { error: error })
         }
     } catch (error) {
-        return response(res, 403, { error })
+        return response(res, 500, { error })
     }
 }
 export default TokenWare
