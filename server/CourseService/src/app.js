@@ -6,6 +6,7 @@ import logger from "./Logs/logger.js";
 import response from './Utils/ResponseHandler/ResponseHandler.js'
 import db from "./Config/Connections/db.js";
 import Courseroute from './Routes/Course/CourseRoute.js'
+import CidListener from "./MiddleWare/Rabbit/CidListener.js";
 
 
 dotenv.config()
@@ -29,5 +30,6 @@ app.use('/*',(req, res) => {
 
 app.listen(PORT, () => {
     db()
+    CidListener()
     console.log(`Course Server is listening on ${PORT}`);
 })
