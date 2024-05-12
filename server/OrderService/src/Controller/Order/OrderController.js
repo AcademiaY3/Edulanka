@@ -1,5 +1,6 @@
 import Order from "../../Model/Order/Order.js";
 import response from "../../Utils/ResponseHandler/ResponseHandler.js";
+import SendOrder from "../../Helpers/RabbitMq/SendOrder.js"
 
 class OrderController {
     // Method to add a new order
@@ -21,12 +22,20 @@ class OrderController {
                 zip_code
             });
 
-            // Save the order to the database
-            const savedOrder = await newOrder.save();
-            if (savedOrder)
-                return response(res, 200, { message: 'Order added' });
-            else
-                return response(res, 403, { message: 'Order adding failed' });
+            const orderResponse = await SendOrder (newOrder.course_id);
+            
+            // Check the order response from RabbitMQ
+            if (orderResponse && orderResponse.isValid) {
+                // Save the order to the database
+                const savedOrder = await newOrder.save();
+                if (savedOrder)
+                    return response(res, 200, { message: 'Order added' });
+                else
+                    return response(res, 403, { message: 'Order adding failed' });
+            } else {
+                return response(res, 404, { message: 'Course not found or invalid' });
+            }
+
         } catch (error) {
             console.log(error);
             return response(res, 500, { error: error.message });
