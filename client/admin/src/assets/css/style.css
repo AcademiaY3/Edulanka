@@ -21454,8 +21454,15 @@ a.text-primary-hover:hover, button.text-primary-hover:hover {
 .sidebar.navbar-expand-xl .sidebar-content .navbar-nav .nav-link.active {
   color: var(--bs-primary) !important;
 }
+.sidebar.navbar-expand-xl .sidebar-content .navbar-nav .nav-link.active:hover {
+  /* color: var(--bs-primary) !important; */
+  background-color: #FF851B;
+  border-radius: 10px;
+  color: white !important;
+}
 .sidebar.navbar-expand-xl .sidebar-content .navbar-nav .nav-link:hover {
-  color: var(--bs-primary) !important;
+  /* color: var(--bs-primary) !important; */
+  color: #FF851B !important;
 }
 .sidebar.navbar-expand-xl .sidebar-content .nav-item [data-bs-toggle=collapse] {
   position: relative;
