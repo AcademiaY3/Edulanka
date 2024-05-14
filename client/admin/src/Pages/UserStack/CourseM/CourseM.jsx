@@ -1,6 +1,7 @@
 import React from 'react'
 import Pagination from '../../../Components/Pagination/Pagination'
 import CourseList from './CourseList'
+import { Link } from 'react-router-dom'
 
 export default function CourseM() {
     return (
@@ -9,7 +10,7 @@ export default function CourseM() {
             <div className="row mb-3">
                 <div className="col-12 d-sm-flex justify-content-between align-items-center">
                     <h1 className="h3 mb-2 mb-sm-0">Courses</h1>
-                    <a href="instructor-create-course.html" className="btn btn-sm btn-primary mb-0">Create a Course</a>
+                    <Link to={'/main/courses/addcourse'} className="btn btn-sm btn-primary mb-0">Create a Course</Link>
                 </div>
             </div>
             {/* Course boxes START */}

@@ -72,7 +72,7 @@ export default function DashBoard() {
                 </div>
                 <div className="row g-4 mb-4">
                     <div className="col-xxl-8">
-                        <div className="card shadow h-100">
+                        <div className="card shadow-none border h-100">
                             {/* Card header */}
                             <div className="card-header border-bottom d-flex justify-content-between align-items-center p-4">
                                 <h5 className="card-header-title">Latest Instructors</h5>
@@ -194,7 +194,7 @@ export default function DashBoard() {
                         </div>
                     </div>
                     <div className="col-xxl-4">
-                        <div className="card shadow h-100">
+                        <div className="card border h-100">
                             {/* Card header */}
                             <div className="card-header border-bottom d-flex justify-content-between align-items-center p-4">
                                 <h5 className="card-header-title">New Joiners</h5>

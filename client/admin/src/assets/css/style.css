@@ -21452,7 +21452,10 @@ a.text-primary-hover:hover, button.text-primary-hover:hover {
   color: var(--bs-white) !important;
 }
 .sidebar.navbar-expand-xl .sidebar-content .navbar-nav .nav-link.active {
-  color: var(--bs-primary) !important;
+  /* color: var(--bs-primary) !important; */
+  background-color: #FF851B;
+    border-radius: 10px;
+    color: white !important;
 }
 .sidebar.navbar-expand-xl .sidebar-content .navbar-nav .nav-link.active:hover {
   /* color: var(--bs-primary) !important; */
@@ -22602,3 +22605,10 @@ html[dir=rtl] .choices__input {
 
 /*User CSS*/
 /*# sourceMappingURL=style.css.map */
+.bg-theme{
+  background-color: #ffe7d1 !important;
+}
+
+.text-theme{
+  color: #FF851B !important;
+}

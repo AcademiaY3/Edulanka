@@ -6,6 +6,7 @@ import AddCourse from './CourseM/AddCourse'
 import DashBoard from './Dashboard/DashBoard'
 import LearnerM from './LearnerM/LearnerM'
 import MyProfile from './MyProfile/MyProfile'
+import { Outlet } from 'react-router-dom'
 
 export default function UserStack() {
     return (
@@ -16,16 +17,7 @@ export default function UserStack() {
             <SideBar />
             {/* outlet starts below */}
             <div className="page-content">
-                {/* <CourseM/> */}
-                {/* <StaffM /> */}
-                {/* <LearnerM/> */}
-                {/* <InstructorM/> */}
-                {/* <AddCourse/> */}
-                {/* <AddStaff/> */}
-                {/* <AddInstructor/> */}
-                <MyProfile/>
-                {/* <DashBoard/> */}
-                {/* <AddInstructor/> */}
+                <Outlet />
             </div>
         </>
     )
