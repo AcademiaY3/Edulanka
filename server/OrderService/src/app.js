@@ -6,10 +6,11 @@ import logger from "./Logs/logger.js";
 import response from './Utils/ResponseHandler/ResponseHandler.js'
 import db from "./Config/Connection/db.js";
 import OrderRoute from './Routes/Order/OrderRoute.js'
+import PayListener from "./MiddleWare/RabbitMq/PayListener.js";
 
 dotenv.config()
 const app = express()
-const PORT = process.env.PORT || 8800
+const PORT = process.env.PORT || 8900
 
 app.use(cors(corsOption))
 app.use(express.json())
@@ -28,5 +29,6 @@ app.use('/*',(req, res) => {
 
 app.listen(PORT, () => {
     db()
+    PayListener()
     console.log(`Order Server is listening on ${PORT}`);
 })

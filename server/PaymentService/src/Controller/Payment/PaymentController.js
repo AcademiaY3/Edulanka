@@ -1,31 +1,43 @@
 import Payment from "../../Model/Payment/Payment.js";
 import response from "../../Utils/ResponseHandler/ResponseHandler.js";
+import SendPayStatus from "../../Helper/RabbitMq/SendPayStatus.js";
 
 class PaymentController {
     // Method to add a new payment
     addPayment = async (req, res) => {
         try {
             // Extract data from request body
-            const { course_id, order_id, instructor_id, learner_id, amount, course_name, pay_status_message, pay_status_code } = req.body;
+            const { order_id,pay_status_message, pay_status_code } = req.body;
 
-            // Create a new payment instance
-            const newPayment = new Payment({
-                course_id,
-                order_id,
-                instructor_id,
-                learner_id,
-                amount,
-                course_name,
-                pay_status_message,
-                pay_status_code,
-            });
+            var pay_status_boolean = false
+            if (pay_status_code == 2) {
+                pay_status_boolean = true
+            } 
 
-            // Save the payment to the database
-            const savedPayment = await newPayment.save();
-            if (savedPayment)
-                return response(res, 200, { message: 'Payment added' });
-            else
-                return response(res, 403, { message: 'Payment adding failed' });
+            //send to course for verify course
+            const payStatusByOrder = await SendPayStatus(order_id, pay_status_boolean)
+            if (payStatusByOrder && payStatusByOrder.sent_status === 'success') {
+                // Create a new payment instance
+                const newPayment = new Payment({
+                    course_id:payStatusByOrder.data.order.course_id,
+                    order_id:payStatusByOrder.data.order._id,
+                    instructor_id:payStatusByOrder.data.order.instructor_id,
+                    learner_id:payStatusByOrder.data.order.learner_id,
+                    amount:payStatusByOrder.data.order.price,
+                    course_name:payStatusByOrder.data.order.course_name,
+                    pay_status_message,
+                    pay_status_code,
+                });
+
+                // Save the payment to the database
+                const savedPayment = await newPayment.save();
+                if (savedPayment)
+                    return response(res, 200, { message: 'Payment added' });
+                else
+                    return response(res, 403, { message: 'Payment adding failed' });
+            } else {
+                return response(res, 403, { message: 'not a valid order' });
+            }
         } catch (error) {
             console.log(error);
             return response(res, 500, { error: error.message });

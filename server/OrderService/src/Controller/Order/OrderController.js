@@ -1,32 +1,65 @@
+import GetCourse from "../../Helpers/Course/GetCourse.js";
 import Order from "../../Model/Order/Order.js";
 import response from "../../Utils/ResponseHandler/ResponseHandler.js";
+import RabbitRes from "../../Utils/Constants/RabbitRes.js";
 
 class OrderController {
+    //update the pay_status_by res
+    updatePayStatusByRabbit = async (oid, pay_status) => {
+        try {
+            const order = await Order.findOne({ _id: oid })
+            if (!order) {
+                return RabbitRes('error', 404, { isPayRes: false, message: "no order found" })
+            }
+            if (pay_status != true && pay_status != false) {
+                return RabbitRes('error', 403, { isPayRes: false, message: "not a valid pay status"  })
+            }
+            const updatedOrder = await Order.updateOne(
+                { _id: order._id },
+                { $set: { pay_status: pay_status } }
+            )
+            if (updatedOrder.modifiedCount === 0)
+                return RabbitRes('error', 403, { isPayRes: false, message: "status updation failed" })
+            
+            return RabbitRes('success', 200, { isPayRes: true, message: "status updated",order })
+        } catch (error) {
+            console.log(error)
+            return RabbitRes('error', 500, { isPayRes: false, message: error })
+        }
+    }
+
     // Method to add a new order
     addOrder = async (req, res) => {
         try {
             // Extract data from request body
-            const { course_id, instructor_id, learner_id, price, course_name, delivery_address, delivery_city, delivery_country, zip_code } = req.body;
+            const { course_id, instructor_id, learner_id, delivery_address, delivery_city, delivery_country, zip_code } = req.body;
 
-            // Create a new order instance
-            const newOrder = new Order({
-                course_id,
-                instructor_id,
-                learner_id,
-                price,
-                course_name,
-                delivery_address,
-                delivery_city,
-                delivery_country,
-                zip_code
-            });
+            //send to course for verify course
+            const courseByService = await GetCourse(course_id)
+            if (courseByService && courseByService.sent_status === 'success') {
+                //save the order
+                // Create a new order instance
+                const newOrder = new Order({
+                    course_id,
+                    instructor_id,
+                    learner_id,
+                    price: courseByService.data.course.price,
+                    course_name: courseByService.data.course.name,
+                    delivery_address,
+                    delivery_city,
+                    delivery_country,
+                    zip_code
+                });
 
-            // Save the order to the database
-            const savedOrder = await newOrder.save();
-            if (savedOrder)
-                return response(res, 200, { message: 'Order added' });
-            else
-                return response(res, 403, { message: 'Order adding failed' });
+                // Save the order to the database
+                const savedOrder = await newOrder.save();
+                if (savedOrder)
+                    return response(res, 200, { message: 'Order added' });
+                else
+                    return response(res, 403, { message: 'Order adding failed' });
+            } else {
+                return response(res, 403, { message: 'not a valid course' });
+            }
         } catch (error) {
             console.log(error);
             return response(res, 500, { error: error.message });

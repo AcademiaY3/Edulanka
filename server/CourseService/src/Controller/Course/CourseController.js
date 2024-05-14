@@ -1,8 +1,24 @@
 import mongoose from "mongoose";
 import Course from "../../Model/Course/Course.js";
 import response from "../../Utils/ResponseHandler/ResponseHandler.js";
+import RabbitRes from "../../Utils/Constants/RabbitRes.js";
 
 class CourseController {
+    //get course from rabbit req
+    getCourseByRabbit = async (id) => {
+        try {
+            const course = await Course.findOne({ _id: id })
+            if (!course) {
+                return RabbitRes('error', 404, { isCourse: false, message: "no course found" })
+            } else {
+                return RabbitRes('success', 200, { isCourse: true, course })
+            }
+        } catch (error) {
+            console.log(error)
+            return RabbitRes('error', 500, { isCourse: false, message: error })
+        }
+    }
+
     // Method to add a new course
     addCourse = async (req, res) => {
         try {
@@ -36,7 +52,7 @@ class CourseController {
                 return response(res, 403, { message: 'course adding failed' });
         } catch (error) {
             console.log(error);
-            return response(res, 500, {error:error.message});
+            return response(res, 500, { error: error.message });
         }
     }
 
@@ -49,7 +65,7 @@ class CourseController {
             return response(res, 200, course);
         } catch (error) {
             console.log(error);
-            return response(res, 500, {error:error.message});
+            return response(res, 500, { error: error.message });
         }
     }
 
@@ -61,7 +77,7 @@ class CourseController {
             return response(res, 200, { courses });
         } catch (error) {
             console.log(error);
-            return response(res, 500, {error:error.message});
+            return response(res, 500, { error: error.message });
         }
     }
 
@@ -92,7 +108,7 @@ class CourseController {
             return response(res, 200, updatedCourse);
         } catch (error) {
             console.log(error);
-            return response(res, 500, {error:error.message});
+            return response(res, 500, { error: error.message });
         }
     }
 }
