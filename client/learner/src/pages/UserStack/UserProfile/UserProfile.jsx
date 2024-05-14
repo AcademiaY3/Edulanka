@@ -1,6 +1,7 @@
 import React from 'react'
 import ProfileNav from '../../../components/ProfileNav/ProfileNav';
 import ProfileBanner from './ProfileBanner/ProfileBanner';
+import { Outlet } from 'react-router-dom';
 
 export default function UserProfile() {
   return (
@@ -13,9 +14,7 @@ export default function UserProfile() {
           <div className="row">
             <ProfileNav />
 
-            {/* outlet */}
-            {/* <Profile /> */}
-            {/* <CourseList /> */}
+            <Outlet/>
           </div>
         </div>
       </section>

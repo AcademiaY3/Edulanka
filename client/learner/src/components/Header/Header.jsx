@@ -2,6 +2,7 @@ import React from "react";
 import avatar from '../../assets/images/avatar/01.jpg';
 import logo from "../../assets/images/logo_light.png"
 import logo2 from "../../assets/images/logo.png"
+import { Link, NavLink } from "react-router-dom";
 export default function Header() {
   return (
     <>
@@ -18,18 +19,18 @@ export default function Header() {
               <ul className="navbar-nav navbar-nav-scroll mx-auto">
                 {/* Nav item 1 Demos */}
                 <li className="nav-item dropdown">
-                  <a className="nav-link " href="#" id="demoMenu" aria-haspopup="true" aria-expanded="false">Home</a>
+                  <NavLink className="nav-link " to={'/main/home'} id="demoMenu" aria-haspopup="true" aria-expanded="false">Home</NavLink>
                 </li>
                 {/* Nav item 2 Pages */}
                 <li className="nav-item dropdown">
-                  <a className="nav-link " href="#" id="pagesMenu" aria-haspopup="true" aria-expanded="false">Courses</a>
+                  <NavLink className="nav-link" to={'/main/courses'} id="pagesMenu" aria-haspopup="true" aria-expanded="false">Courses</NavLink>
                 </li>
                 {/* Nav item 3 Account */}
                 <li className="nav-item dropdown">
-                  <a className="nav-link " href="#" id="accounntMenu" aria-haspopup="true" aria-expanded="false">AboutUs</a>
+                  <NavLink className="nav-link "to={'/main/about'} id="accounntMenu" aria-haspopup="true" aria-expanded="false">AboutUs</NavLink>
                 </li>
                 <li className="nav-item dropdown">
-                  <a className="nav-link " href="#" id="accounntMenu" aria-haspopup="true" aria-expanded="false">Company</a>
+                  <NavLink className="nav-link " to={'/main/company'} id="accounntMenu" aria-haspopup="true" aria-expanded="false">Company</NavLink>
                 </li>
               </ul>
             </div>
@@ -47,9 +48,9 @@ export default function Header() {
                 </li>
                 <li> <hr className="dropdown-divider" /></li>
                 {/* Links */}
-                <li><a className="dropdown-item" href="#"><i className="fas fa-user fa-fw me-2" />Edit Profile</a></li>
+                <li><Link className="dropdown-item" to={'/main/userprofile/myprofile'}><i className="fas fa-user fa-fw me-2" />Edit Profile</Link></li>
                 <li><a className="dropdown-item" href="#"><i className="fas fa-info-circle fa-fw me-2" />Help</a></li>
-                <li><a className="dropdown-item bg-danger-soft-hover" href="#"><i className="fas fa-power-off fa-fw me-2" />Sign Out</a></li>
+                <li><a className="dropdown-item bg-danger-soft-hover" ><i className="fas fa-power-off fa-fw me-2" />Sign Out</a></li>
               </ul>
             </div>
             {/* Profile START */}

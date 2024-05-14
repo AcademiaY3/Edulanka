@@ -4759,7 +4759,12 @@ textarea.form-control-lg {
   list-style: none;
 }
 .navbar-nav .nav-link.active, .navbar-nav .nav-link.show {
-  color: var(--bs-navbar-active-color);
+  /* color: var(--bs-navbar-active-color); */
+  color: #ff851b;
+  background-color: #FFE7D1;
+  border-radius: 10px;
+  /* padding-top: 0px; */
+  /* padding-bottom: 0px; */
 }
 .navbar-nav .dropdown-menu {
   position: static;
@@ -18638,8 +18643,10 @@ textarea.form-control-lg {
 }
 
 .list-group-dark .list-group-item:not(.bg-danger-soft-hover):hover, .list-group-dark .list-group-item:not(.bg-danger-soft-hover).active {
-  color: var(--bs-dark) !important;
-  background-color: var(--bs-white) !important;
+  /* color: var(--bs-dark) !important; */
+  color: white !important;
+  /* background-color: var(--bs-white) !important; */
+  background-color: #ff851b !important;
 }
 
 .collapse-list .list-group-item[data-bs-toggle=collapse] {

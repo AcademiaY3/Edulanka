@@ -1,4 +1,5 @@
 import React from 'react'
+import { NavLink } from 'react-router-dom'
 
 export default function ProfileNav() {
     return (
@@ -11,15 +12,15 @@ export default function ProfileNav() {
                 <div className="offcanvas-body p-3 p-xl-0">
                     <div className="bg-dark border rounded-3 pb-0 p-3 w-100">
                         <div className="list-group list-group-dark list-group-borderless">
-                            <a to="#" className="list-group-item" href="instructor-manage-course.html">
+                            <NavLink to={'/main/userprofile/mycourse'} className="list-group-item">
                                 <i className="faf fa-basket fa-fw me-2" />My Courses
-                            </a>
-                            <a to="#" className="list-group-item" href="instructor-quiz.html">
+                            </NavLink>
+                            <NavLink to={'/main/userprofile/myprofile'} className="list-group-item">
                                 <i className="faf fa-question-diamond fa-fw me-2" />Profile
-                            </a>
-                            <a className="list-group-item text-danger bg-danger-soft-hover" href="sign-in.html">
+                            </NavLink>
+                            <button className="list-group-item text-danger bg-danger-soft-hover">
                                 <i className="fas fa-sign-out-alt fa-fw me-2" />Sign Out
-                            </a>
+                            </button>
                         </div>
                     </div>
                 </div>
