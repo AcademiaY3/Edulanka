@@ -1,10 +1,9 @@
 import './App.css'
-import Main from './pages/Main'
-
+import UserStack from './pages/UserStack/UserStack'
 function App() {
   return (
     <>
-      <Main />
+      <UserStack />
     </>
   )
 }
