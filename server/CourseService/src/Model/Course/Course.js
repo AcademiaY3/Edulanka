@@ -24,18 +24,25 @@ const courseSchema = new mongoose.Schema(
             type: Number,
             required: true,
         },
+        outline: {
+            type: String,
+            required: true,
+        },
         skills: {
             type: String,
             enum: skillType,
+            default:'intermediate',
             required: true,
         },
         language: {
             type: String,
             required: true,
+            default:'english'
         },
         certificate: {
             type: String,
             enum: certificateCheck,
+            default:'yes',
             required: true,
         },
         thumbnail: {
@@ -92,9 +99,13 @@ const courseSchema = new mongoose.Schema(
             required: true,
             default: false
         },
-        approved_by: {
+        added_by: {
             type: mongoose.Schema.Types.ObjectId,
             required: true,
+        },
+        approved_by: {
+            type: mongoose.Schema.Types.ObjectId,
+            // required: true,
         }
     },
     {
