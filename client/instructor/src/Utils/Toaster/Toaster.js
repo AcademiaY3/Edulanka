@@ -23,6 +23,7 @@ class Toaster {
             closeOnClick: true,
             pauseOnHover: false,
             draggable: false,
+            theme: "colored",
             onClose: afterToast
         });
     }
@@ -41,7 +42,7 @@ class Toaster {
             pauseOnHover: false,
             draggable: true,
             progress: undefined,
-            theme: "light",
+            theme: "colored",
             onClose: afterToast
         });
     }

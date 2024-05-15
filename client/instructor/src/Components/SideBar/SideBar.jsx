@@ -1,8 +1,18 @@
 import React from 'react'
 import Logo from '../../assets/logo_light.png'
-import { Link, NavLink } from 'react-router-dom'
+import { Link, NavLink, useNavigate } from 'react-router-dom'
+import Toaster from '../../Utils/Toaster/Toaster'
+import Authenticate from '../../Config/LocalStore/Authenticate'
 
 export default function SideBar() {
+
+    const navigate = useNavigate()
+    const logoutUser = () => {
+        Toaster.justToast('info', "   Logging You Out ......", () => {
+            Authenticate.logoutUser();
+            navigate('/login')
+        })
+    }
     return (
         <>
             <nav className="navbar sidebar navbar-expand-xl navbar-dark bg-dark">
@@ -40,18 +50,14 @@ export default function SideBar() {
                                 <NavLink className="nav-link" to={'/main/profile'}><i className="far fa-user fa-fw me-2" />My Profile</NavLink>
                             </li>
                             <li className="nav-item">
-                                <button className="nav-link" ><i className="far fa-power-off fa-fw me-2" />Logout</button>
+                                <button onClick={logoutUser} className="nav-link" ><i className="fas fa-power-off fa-fw me-2" />Logout</button>
                             </li>
                         </ul>
-                        
+
                         <div className="px-3 mt-auto pt-3">
                             <div className="d-flex align-items-center justify-content-between text-primary-hover">
-                                <a className="h5 mb-0 text-body" href="sign-in.html" data-bs-toggle="tooltip" data-bs-placement="top" title="Sign out">
-                                    <i className="fas fa-power-off" />
-                                </a>
-                                <a className="h5 mb-0 text-body" href="admin-setting.html" data-bs-toggle="tooltip" data-bs-placement="top" title="Settings">
-                                    <i className="fas fa-gear" />
-                                </a>
+                                <i onClick={logoutUser} style={{cursor:'pointer'}} className="fas fa-power-off fs-5" />
+                                <i className="fas fa-gear fs-5" />
                             </div>
                         </div>
                     </div>

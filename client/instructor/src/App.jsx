@@ -10,6 +10,7 @@ import Payments from './Pages/UserStack/Payments/Payment'
 import Remainder from './Pages/UserStack/Remainder/Remainder'
 import MyProfile from './Pages/UserStack/MyProfile/MyProfile'
 import AddCourse from './Pages/UserStack/CourseM/AddCourse'
+import NotFound from './Pages/NotFound/NotFound'
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
           <Route path='remainder' element={<Remainder/>} />
           <Route path='profile' element={<MyProfile/>} />
         </Route>
+        <Route path='*' element={<NotFound />} />
       </Routes>
     </>
   )
