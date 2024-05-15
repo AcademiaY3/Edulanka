@@ -39,6 +39,9 @@ export default function SideBar() {
                             <li className="nav-item">
                                 <NavLink className="nav-link" to={'/main/profile'}><i className="far fa-user fa-fw me-2" />My Profile</NavLink>
                             </li>
+                            <li className="nav-item">
+                                <button className="nav-link" ><i className="far fa-power-off fa-fw me-2" />Logout</button>
+                            </li>
                         </ul>
                         
                         <div className="px-3 mt-auto pt-3">
