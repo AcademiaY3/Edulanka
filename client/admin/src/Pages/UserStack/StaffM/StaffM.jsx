@@ -9,7 +9,7 @@ export default function StaffM() {
                 {/* Title */}
                 <div className="row">
                     <div className="col-12">
-                        <h1 className="h3 mb-2 mb-sm-0">Students</h1>
+                        <h1 className="h3 mb-2 mb-sm-0">Staff</h1>
                     </div>
                 </div>
                 <div className="card bg-transparent">

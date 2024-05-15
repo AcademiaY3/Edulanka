@@ -36,7 +36,13 @@ export default function AddCourse() {
                 <div className="col-md-3">
                   <input type="text" className="form-control" placeholder="Tags (comma separated)" aria-label="Tags" required />
                 </div>
-                
+                <div className="col-md-3">
+                  <label htmlFor="certificate" className="form-label">Certificate:</label>
+                  <select className="form-control" id="certificate" aria-label="Certificate" required>
+                    <option value="yes">Yes</option>
+                    <option value="no">No</option>
+                  </select>
+                </div>
                 <div className="col-md-3">
                   <label htmlFor="photo-upload" className="form-label">Upload Photo:</label>
                   <input type="file" className="form-control" id="photo-upload" accept="image/*" required />

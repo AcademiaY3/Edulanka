@@ -1,17 +1,19 @@
 import React from 'react'
 import Pagination from '../../../Components/Pagination/Pagination'
 import InstructorList from './InstructorList'
+import { Link } from 'react-router-dom'
 
 export default function InstructorM() {
     return (
         <>
             <div className="page-content-wrapper border">
                 {/* Title */}
-                <div className="row">
-                    <div className="col-12">
-                        <h1 className="h3 mb-2 mb-sm-0">Instructors</h1>
-                    </div>
+                <div className="row mb-3">
+                <div className="col-12 d-sm-flex justify-content-between align-items-center">
+                    <h1 className="h3 mb-2 mb-sm-0">Instructors</h1>
+                    <Link to={'/main/instructors/addinstructor'} className="btn btn-sm btn-primary mb-0">Add Instructors</Link>
                 </div>
+            </div>
                 <div className="card bg-transparent">
                     {/* Card header START */}
                     <div className="card-header bg-transparent border-bottom px-0">
