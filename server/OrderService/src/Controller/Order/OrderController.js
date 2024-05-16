@@ -40,11 +40,7 @@ class OrderController {
                 //save the order
                 // Create a new order instance
                 const newOrder = new Order({
-                    course_id,
-                    instructor_id,
-                    learner_id,
-                    price: courseByService.data.course.price,
-                    course_name: courseByService.data.course.name,
+                    orderId:id,
                     delivery_address,
                     delivery_city,
                     delivery_country,

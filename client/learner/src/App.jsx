@@ -13,6 +13,7 @@ import MyCourse from './pages/UserStack/UserProfile/MyCourses/MyCourse'
 import MyProfile from './pages/UserStack/UserProfile/MyProfile/MyProfile'
 import About from './pages/UserStack/About/About'
 import Company from './pages/UserStack/Company/Company'
+import EnrolledCourse from './pages/UserStack/EnrolledCourse/EnrolledCourse'
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
           <Route path='home' element={<Home/>} />
           <Route path='about' element={<About/>} />
           <Route path='company' element={<Company/>} />
+          <Route path='enrolledcourse' element={<EnrolledCourse/>} />
           <Route path='courses' element={<CauseGrid/>} />
           <Route path='courses/:id' element={<CourseDetail/>} />
           <Route path='courses/checkout/:id' element={<PlaceOrder/>} />
