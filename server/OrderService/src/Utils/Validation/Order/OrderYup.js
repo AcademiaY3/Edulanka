@@ -33,6 +33,10 @@ class OrderYup {
     deleteOrder = yup.object({
         orderId: yup.string().required(),
     });
+
+    getInstructorOrders = yup.object({
+        instructor_id: yup.string().required(),
+    });
 }
 
 const orderYup = new OrderYup();

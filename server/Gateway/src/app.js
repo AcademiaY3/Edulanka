@@ -28,6 +28,7 @@ app.get('/', (req, res) => {
 app.use('/api/v1/auth' , proxy(process.env.auth_service_route))
 app.use('/api/v1/order' ,HeaderValidation(AuthHeaderYup.authHeaderSchema) , TokenWare, proxy(process.env.order_service_route))
 app.use('/api/v1/payment' , HeaderValidation(AuthHeaderYup.authHeaderSchema) , TokenWare,proxy(process.env.payment_service_route))
+app.use('/api/v1/course' , HeaderValidation(AuthHeaderYup.authHeaderSchema) , TokenWare,proxy(process.env.course_service_route))
 
 //not found route
 app.use((req, res) => {

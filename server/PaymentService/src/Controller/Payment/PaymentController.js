@@ -81,6 +81,22 @@ class PaymentController {
         }
     }
 
+    // Method to get payments by instructor ID
+    getInstructorPays = async (req, res) => {
+        const { instructor_id } = req.body;
+        console.log(instructor_id)
+        try {
+            const payment = await Payment.find({instructor_id});
+            if (payment.length===0)
+                return response(res, 404, { message: 'Payments not found' });
+            const total = payment.length
+            return response(res, 200, {total,payments:payment});
+        } catch (error) {
+            console.log(error);
+            return response(res, 500, { error: error.message });
+        }
+    }
+
     // Method to update a payment by ID
     approvePayment = async (req, res) => {
         const { pay_id, admin_id } = req.body;

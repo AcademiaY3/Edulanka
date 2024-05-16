@@ -81,6 +81,18 @@ class CourseController {
         }
     }
 
+    getAllInstructorsLearners = async (req, res) => {
+        const { instructor } = req.body;
+        try {
+            const course = await Course.find({instructor});
+            if (!course) return response(res, 404, { message: 'course not found' });
+            return response(res, 200, course);
+        } catch (error) {
+            console.log(error);
+            return response(res, 500, { error: error.message });
+        }
+    }
+
     // Method to delete a course by ID
     deleteCourse = async (req, res) => {
         // const { courseId } = req.params;

@@ -44,9 +44,6 @@ export default function SideBar() {
                             </li>
                             <li className="nav-item ms-2 my-2">Requests</li>
                             <li className="nav-item">
-                                <NavLink className="nav-link" to={'/main/remainder'}><i className="far fa-address-book fa-fw me-2" />Remainders</NavLink>
-                            </li>
-                            <li className="nav-item">
                                 <NavLink className="nav-link" to={'/main/profile'}><i className="far fa-user fa-fw me-2" />My Profile</NavLink>
                             </li>
                             <li className="nav-item">

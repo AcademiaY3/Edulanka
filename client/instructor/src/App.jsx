@@ -7,7 +7,6 @@ import UserStack from './Pages/UserStack/UserStack'
 import LearnerM from './Pages/UserStack/LearnerM/LearnerM'
 import Orders from './Pages/UserStack/Orders/Orders'
 import Payments from './Pages/UserStack/Payments/Payment'
-import Remainder from './Pages/UserStack/Remainder/Remainder'
 import MyProfile from './Pages/UserStack/MyProfile/MyProfile'
 import AddCourse from './Pages/UserStack/CourseM/AddCourse'
 import NotFound from './Pages/NotFound/NotFound'
@@ -26,7 +25,6 @@ function App() {
           <Route path='learners' element={<LearnerM/>} />
           <Route path='orders' element={<Orders/>} />
           <Route path='payments' element={<Payments/>} />
-          <Route path='remainder' element={<Remainder/>} />
           <Route path='profile' element={<MyProfile/>} />
         </Route>
         <Route path='*' element={<NotFound />} />

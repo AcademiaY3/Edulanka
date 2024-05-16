@@ -8,6 +8,7 @@ import response from "./Utils/ResponseHandler/ResponseHandler.js";
 import ResTypes from "./Utils/Constants/ResTypes.js";
 import db from "./Config/Connections/db.js";
 import AuthRoute from "./Routes/Auth/AuthRoutes.js"
+import UserRoute from './Routes/Users/UserRoute.js'
 
 dotenv.config()
 const app = express()
@@ -23,6 +24,7 @@ app.get('/', (req, res) => {
 
 //routes init
 app.use('/service',AuthRoute)
+app.use('/service/user',UserRoute)
 
 app.use((req, res) => {
     return response(res, 404, ResTypes.errors.not_found)

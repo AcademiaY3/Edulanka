@@ -12,7 +12,7 @@ class OrderController {
                 return RabbitRes('error', 404, { isPayRes: false, message: "no order found" })
             }
             if (pay_status != true && pay_status != false) {
-                return RabbitRes('error', 403, { isPayRes: false, message: "not a valid pay status"  })
+                return RabbitRes('error', 403, { isPayRes: false, message: "not a valid pay status" })
             }
             const updatedOrder = await Order.updateOne(
                 { _id: order._id },
@@ -20,8 +20,8 @@ class OrderController {
             )
             if (updatedOrder.modifiedCount === 0)
                 return RabbitRes('error', 403, { isPayRes: false, message: "status updation failed" })
-            
-            return RabbitRes('success', 200, { isPayRes: true, message: "status updated",order })
+
+            return RabbitRes('success', 200, { isPayRes: true, message: "status updated", order })
         } catch (error) {
             console.log(error)
             return RabbitRes('error', 500, { isPayRes: false, message: error })
@@ -73,6 +73,21 @@ class OrderController {
             const order = await Order.findById(orderId);
             if (!order) return response(res, 404, { message: 'Order not found' });
             return response(res, 200, order);
+        } catch (error) {
+            console.log(error);
+            return response(res, 500, { error: error.message });
+        }
+    }
+
+    // Method to get payments by instructor ID
+    getInstructorOrders = async (req, res) => {
+        const { instructor_id } = req.body;
+        try {
+            const order = await Order.find({ instructor_id });
+            if (order.length === 0)
+                return response(res, 404, { message: 'orders not found' });
+            const total = order.length
+            return response(res, 200, { total, orders: order });
         } catch (error) {
             console.log(error);
             return response(res, 500, { error: error.message });
