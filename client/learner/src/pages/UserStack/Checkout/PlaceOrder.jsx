@@ -1,8 +1,81 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useFormik } from 'formik';
+import { useNavigate, useParams } from 'react-router-dom'
 import BreadCrumb from "../../../components/BreadCrumb/BreadCrumb";
 import img01 from '../../../assets/images/courses/4by3/08.jpg'
+import OrderYup from '../../../validation/OrderYup/OrderYup';
+import OrderService from '../../../services/Order/OrderService';
+import ResponseHandler from '../../../utils/Constants/ResponseHandler';
+import Toaster from '../../../utils/Constants/Toaster';
+import LocalStore from '../../../store/LocalStore';
+import CourseService from '../../../services/Course/CourseService';
 
-export default function PlaceOrder() {
+export default function Checkout() {
+    // Accessing URL parameters
+    const { id } = useParams();
+    const [course, setCourse] = useState({})
+    const [loading, setLoading] = useState(false)
+    const navigate = useNavigate()
+    // Fetch token data from LocalStore
+    const tokenData = LocalStore.getToken();
+
+    useEffect(() => {
+        fetchData()
+    }, [])
+
+    const fetchData = async () => {
+      setLoading(true)
+      try {
+          const response = await CourseService.getCourse(id)
+          if (response.data.code === 200) {
+            setCourse(response.data.data.course)
+          }
+      } catch (error) {
+          if (error.response.data.code === 404) {
+              Toaster.justToast('error', error.response.data.data.message, () => { })
+          }
+          if (error.response.data.code === 500) {
+              Toaster.justToast('error', error.response.data.data.message, () => { })
+          }
+      } finally {
+          setLoading(false)
+      }
+  }
+
+  const initValues = {
+    email: tokenData ? tokenData.email : null,
+    course_id:id,
+    instructor_id:id,
+    learner_id:id,
+    delivery_address: '',
+    delivery_country: '',
+    delivery_city: '',
+    zip_code: ''
+}
+
+const { values, handleChange, handleSubmit, errors, touched } = useFormik({
+  initialValues: initValues,
+  validationSchema: OrderYup.orderSchema,
+  onSubmit: async (values) => {
+      setLoading(true)
+      Toaster.loadingToast("Placing Order .......")
+      try {
+          const result = await OrderService.addOrder(values)
+          if (result.data.code === 200) {
+              Toaster.justToast('success', result.data.data.message, () => {
+                  Toaster.dismissLoadingToast()
+                  navigate('/main/courses')
+              })
+          }
+      } catch (error) {
+          ResponseHandler.handleResponse(error)
+      } finally {
+          setLoading(false)
+          Toaster.dismissLoadingToast()
+      }
+  }
+})
+
   return (
     <>
       <BreadCrumb />
@@ -14,54 +87,79 @@ export default function PlaceOrder() {
                 {/* Title */}
                 <h5 className="mb-0">Personal Details</h5>
                 {/* Form START */}
-                <form className="row g-3 mt-0">
+                <form className="row g-3 mt-0" onSubmit={handleSubmit}>
                   {/* Name */}
-                  <div className="col-md-6 bg-light-input">
-                    <label htmlFor="course" className="form-label">Course name *</label>
-                    <input type="text" className="form-control" id="courseName" placeholder="Course" />
-                  </div>
+                  
                   {/* Price */}
-                  <div className="col-md-6 bg-light-input">
-                    <label htmlFor="price" className="form-label">Price *</label>
-                    <input type="number" className="form-control" id="price" placeholder="Price" />
-                  </div>
+                  
                   {/* Pay Status */}
-                  <div className="col-md-6 bg-light-input">
-                    <label htmlFor="status" className="form-label">Pay Status *</label>
-                    <input type="text" className="form-control" id="status" placeholder="No Paid" />
-                  </div>
+                  
                   {/* Country option */}
                   <div className="col-md-6 bg-light-input">
                     <label htmlFor="mobileNumber" className="form-label">Select country *</label>
-                    <select className="form-select js-choice" aria-label=".form-select-lg">
-                      <option value>Select country</option>
-                      <option>India</option>
-                      <option>China</option>
-                      <option>USA</option>
-                      <option>Canada</option>
-                      <option>Paris</option>
-                      <option>Australia</option>
-                      <option>Japan</option>
-                      <option>Brazil</option>
+                    <select 
+                        className={`form-control ${errors.delivery_country && touched.delivery_country ? 'is-invalid' : ''}`} 
+                        aria-label=".form-select-lg"
+                        name= 'delivery_country'
+                        value={values.delivery_country} // Set the value here
+                        onChange={handleChange} // Handle the change event
+                    >
+                        <option value="">Select country</option>
+                        <option>Sri Lanka</option>
+                        <option>India</option>
+                        <option>USA</option>
+                        <option>Canada</option>
+                        <option>Paris</option>
+                        <option>Australia</option>
+                        <option>Japan</option>
+                        <option>Brazil</option>
                     </select>
-                  </div>
+                    <div className="invalid-feedback">
+                        {errors.delivery_country}
+                    </div>
+                </div>
+
                   {/* State city */}
 
                   <div className="col-md-6 bg-light-input">
                     <label htmlFor="city" className="form-label">Select city *</label>
-                    <input type="text" className="form-control" id="city" placeholder="City" />
+                    <input 
+                      name="delivery_city"
+                      value={values.delivery_city}
+                      type="text" 
+                      className={`form-control ${errors.delivery_city && touched.delivery_city ? 'is-invalid' : ''}`} 
+                      id="city" 
+                      onChange={handleChange}
+                      placeholder="City" 
+                    />
                   </div>
 
                   {/* Address */}
                   <div className="col-md-6 bg-light-input">
                     <label htmlFor="address" className="form-label">Address *</label>
-                    <input type="text" className="form-control" id="address" placeholder="Address" />
+                    <input 
+                      name="delivery_address"
+                      value={values.delivery_address}
+                      type="text" 
+                      className={`form-control ${errors.delivery_address && touched.delivery_address ? 'is-invalid' : ''}`} 
+                      id="address" 
+                      onChange={handleChange}
+                      placeholder="Address" 
+                    />
                   </div>
 
                   {/* Postal code */}
                   <div className="col-md-6 bg-light-input">
                     <label htmlFor="postalCode" className="form-label">ZIP code *</label>
-                    <input type="text" className="form-control" id="zipcode" placeholder="ZIP code" />
+                    <input
+                      name="zip_code"
+                      value={values.zip_code}
+                      type="text" 
+                      className={`form-control ${errors.zip_code && touched.zip_code ? 'is-invalid' : ''}`} 
+                      id="zipcode" 
+                      onChange={handleChange}
+                      placeholder="ZIP code" 
+                    />
                   </div>
                 </form>
               </div>
@@ -104,7 +202,7 @@ export default function PlaceOrder() {
                       </li>
                     </ul>
                     <div className="d-grid">
-                      <a href="#" className="btn btn-lg btn-success">Place Order</a>
+                      <a href="#" type='submit' disabled={loading} className="btn btn-lg btn-success">Place Order</a>
                     </div>
                     {/* Content */}
                     <p className="small mb-0 mt-2 text-center">By completing your purchase, you agree to these <a href="#"><strong>Terms of Service</strong></a></p>
