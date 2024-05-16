@@ -1,8 +1,82 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ReactQuill from 'react-quill'
+// import { useNavigate, useParams } from 'react-router-dom'
+// import { useFormik } from 'formik';
+// import InstructorYup from '../../../Validation/Instructor/InstructorYup';
+// import Toaster from '../../../Utils/Constants/Toaster';
+// import InstructorService from '../../../services/InstructorSer/InstructorService';
+// import LocalStore from '../../../Store/LocalStore';
 
 export default function AddInstructor() {
-    const [value, setValue] = useState('');
+
+//    const [instructor, setInstructor] = useState({})
+   
+//    const [loading, setLoading] = useState(false)
+//    const navigate = useNavigate()
+//    // Fetch token data from LocalStore
+//    const tokenData = LocalStore.getToken();
+
+//    useEffect(() => {
+//        fetchData()
+//    }, [])
+
+//    const fetchData = async () => {
+//        setLoading(true)
+//        try {
+//            const response = await InstructorService.getinstructor(id)
+//            if (response.data.code === 200) {
+//                setInstructor(response.data.data.instructor)
+//            }
+//        } catch (error) {
+//            if (error.response.data.code === 404) {
+//                Toaster.justToast('error', error.response.data.data.message, () => { })
+//            }
+//            if (error.response.data.code === 500) {
+//                Toaster.justToast('error', error.response.data.data.message, () => { })
+//            }
+//        } finally {
+//            setLoading(false)
+//        }
+//    }
+
+//    const initValues = {
+//     name: '',
+//     email: '',
+//     telephone: '',
+//     gender:'',
+//     experience: '',
+//     skill: '',
+//     degree: '',
+//     aboutMe: '', // Text for the about me section
+//     password: '',
+//     image: null, // File object for image upload
+    
+  
+    
+// };
+
+//    const { values, handleChange, handleSubmit, errors, touched } = useFormik({
+//        initialValues: initValues,
+//        validationSchema: InstructorYup.instructorSchema,
+//        onSubmit: async (values) => {
+//            setLoading(true)
+//            Toaster.loadingToast("Adding Instructor .......")
+//            try {
+//                const result = await InstructorService.addInstructor(values)
+//                if (result.data.code === 200) {
+//                    Toaster.justToast('success', result.data.data.message, () => {
+//                        Toaster.dismissLoadingToast()
+//                        navigate('/main/instructors')
+//                    })
+//                }
+//            } catch (error) {
+//                ResponseHandler.handleResponse(error)
+//            } finally {
+//                setLoading(false)
+//                Toaster.dismissLoadingToast()
+//            }
+//        }
+//    })
 
     return (
         <div className="page-content-wrapper border">
@@ -11,7 +85,7 @@ export default function AddInstructor() {
                 <div className="col-12">
                     <div className="card p-2">
                         <h2 className="section-title">Add New Instructor</h2>
-                        <form>
+                        <form >
                             <div className="row row-gap-4">
                                 <div className="col-md-3">
                                     <input type="text" className="form-control" placeholder="Name" aria-label="Name" required />
@@ -43,7 +117,7 @@ export default function AddInstructor() {
                                 </div>
                                 <div className="col-12 text-end mt-5">
                                     <button type='button' className='btn btn-primary'>Go Back</button>
-                                    <button className='btn btn-success ms-3'>Add Instructor</button>
+                                    <button className='btn btn-success ms-3' type='button'>Add Instructor</button>
                                 </div>
                             </div>
                         </form>

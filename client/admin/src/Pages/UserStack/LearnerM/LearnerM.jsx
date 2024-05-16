@@ -1,15 +1,16 @@
 import React from 'react'
 import LearnerList from './LearnerList'
+import { Link } from 'react-router-dom'
 
 export default function LearnerM() {
     return (
         <>
             <div className="page-content-wrapper border">
-                {/* Title */}
-                <div className="row">
-                    <div className="col-12">
-                        <h1 className="h3 mb-2 mb-sm-0">Learners</h1>
-                    </div>
+            <div className="row mb-3">
+                <div className="col-12 d-sm-flex justify-content-between align-items-center">
+                    <h1 className="h3 mb-2 mb-sm-0">Learners</h1>
+                    <Link to={'/main/learners/addlearner'} className="btn btn-sm btn-primary mb-0">Add Learners</Link>
+                </div>
                 </div>
                 <div className="card bg-transparent">
                     {/* Card header START */}

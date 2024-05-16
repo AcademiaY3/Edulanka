@@ -4,6 +4,8 @@ import ReactQuill from 'react-quill'
 export default function AddLearner() {
     const [value, setValue] = useState('');
 
+    
+
     return (
         <>
             <div className="page-content-wrapper border">
