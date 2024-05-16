@@ -9,6 +9,7 @@ class LearnerService {
         this.UPDATE_LEARNER = "service/updateLearner";
         this.GET_ALL_LEARNERS = "service/getAllLearners";
         this.DELETE_LEARNER = "service/deleteLearner";
+        this.GET_LEARNER = "service/getLearner";
    
     }
 
@@ -36,6 +37,12 @@ class LearnerService {
         return axios.delete(`${this.baseURL}/${this.DELETE_LEARNER}/${id}`, BaseService.getHeader());
     }
 
+    getLearner(input) {
+        let data = {
+            pid : input
+        }
+        return axios.post(this.GET_LEARNER,data)
+    }
 
 }
 

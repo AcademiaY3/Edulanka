@@ -11,6 +11,7 @@ class InstructorService {
         this.UPDATE_INSTRUCTOR = "service/updateInstructor";
         this.GET_ALL_INSTRUCTORS = "service/getAllInstructors";
         this.DELETE_INSTRUCTOR = "service/deleteInstructor";
+        this.GET_INSTRUCTOR = "service/getInstructor";
 
     }
 
@@ -36,6 +37,13 @@ class InstructorService {
 
     deleteInstructor(id) {
         return axios.delete(`${this.baseURL}/${this.DELETE_INSTRUCTOR}/${id}`, BaseService.getHeader());
+    }
+
+    getInstructor(input) {
+        let data = {
+            iid : input
+        }
+        return axios.post(this.GET_LEARNER,data)
     }
 
 

@@ -10,7 +10,7 @@ import Toaster from '../../Utils/Constants/Toaster'
 import { useFormik } from 'formik'
 import AuthYup from '../../Validation/AuthYup'
 import LocalStore from '../../Store/LocalStore'
-import ResponseHandler from '../../Utils/Constants/ResponseHandler'
+// import ResponseHandler from '../../Utils/Constants/ResponseHandler'
 import { useNavigate} from 'react-router-dom'
 import AuthService from '../../services/Auth/AuthService'
 
@@ -22,6 +22,7 @@ export default function Login() {
     const initValues = {
         email: '',
         password: '',
+        role:'admin'
     }
     const { values, handleChange, handleSubmit } = useFormik({
         initialValues: initValues,
@@ -31,17 +32,17 @@ export default function Login() {
             Toaster.loadingToast("Validating User .......")
             try {
                 const result = await AuthService.authLogin(values)
-                if (result.data.code === 201) {
+                if (result.data.code === 200) {
                     const { token, role, email } = result.data.data;
                     LocalStore.storeToken({ token, role, email });
                     Toaster.justToast('success', result.data.data.message, () => {
                         // Toaster.dismissLoadingToast()
                         if (role === "admin")
-                            navigate('/main/admin/dashboard')
+                            navigate('/main/dashboard')
                     })
                 }
             } catch (error) {
-                ResponseHandler.handleResponse(error)
+                // ResponseHandler.handleResponse(error)
             } finally {
                 setLoading(false)
                 Toaster.dismissLoadingToast()

@@ -8,7 +8,8 @@ class AuthYup {
     // })
     loginSchema = yup.object({
         password: yup.string().required(),
-        email: yup.string().required()
+        email: yup.string().email().required(),
+        role: yup.string().required()
     })
     passwordReset = yup.object({
         email:yup.string().email().required()
