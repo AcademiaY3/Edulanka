@@ -14,6 +14,9 @@ router.get("/getAllOrders", AdminInstructorCheck, OrderController.getAllOrders);
 // Route to get an order by ID
 router.get("/getOrder/:orderId", AdminInstructorCheck, OrderController.getOrder);
 
+// Route to get an order by ID
+router.post("/getInstructorOrders",AdminInstructorCheck ,ValidateSchema(OrderYup.getInstructorOrders) , OrderController.getInstructorOrders);
+
 // Route to delete an order by ID
 router.post("/deleteOrder", AdminInstructorCheck, ValidateSchema(OrderYup.deleteOrder), OrderController.deleteOrder);
 

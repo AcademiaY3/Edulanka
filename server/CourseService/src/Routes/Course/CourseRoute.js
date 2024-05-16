@@ -13,7 +13,10 @@ router.post("/addCourse", AdminInstCheck, ValidateScehma(CourseYup.addCourse), C
 router.get("/getAllCourses", AdminInstCheck,CourseController.getAllCourses);
 
 // Route to get a course by ID
-router.get("/getCourse/:courseId", AdminInstCheck,CourseController.getCourse);
+router.get("/getCourse/:courseId", AdminInstCheck, CourseController.getCourse);
+
+//get learners enrolled for a instructor
+router.post("/getAllInstructorsLearners",AdminInstCheck,ValidateScehma(CourseYup.getAllInstructorsLearners),(CourseController.getAllInstructorsLearners))
 
 // Route to delete a course by ID
 router.post("/deleteCourse", AdminInstCheck, ValidateScehma(CourseYup.deleteCourse),CourseController.deleteCourse);

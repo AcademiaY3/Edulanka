@@ -10,6 +10,10 @@ class PaymentYup {
         pay_id: yup.string().required(),
         admin_id: yup.string().required(),
     });
+    getInstructorPays = yup.object({
+        instructor_id: yup.string().required(),
+    });
+    
 }
 
 const paymentYup = new PaymentYup();

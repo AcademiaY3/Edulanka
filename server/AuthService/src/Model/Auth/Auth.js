@@ -34,6 +34,18 @@ const authSchema = new mongoose.Schema(
             lowercase: true,
             enum: gender
         },
+        experience: {
+            type: String,
+        },
+        skill: {
+            type: String,
+        },
+        degree: {
+            type: String,
+        },
+        about_me: {
+            type: String,
+        },
         password: {
             type: String,
             required: true,
