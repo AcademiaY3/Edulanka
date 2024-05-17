@@ -24,10 +24,7 @@ export default function SideBar() {
                 <div className="offcanvas offcanvas-start flex-row custom-scrollbar h-100" data-bs-backdrop="true" tabIndex={-1} id="offcanvasSidebar">
                     <div className="offcanvas-body sidebar-content d-flex flex-column bg-dark">
                         <ul className="navbar-nav flex-column" id="navbar-sidebar">
-                            <li className="nav-item">
-                                <NavLink to={'/main/dashboard'} className="nav-link"><i className="fas fa-home fa-fw me-2" />Dashboard</NavLink>
-                            </li>
-                            <li className="nav-item ms-2 my-2">Pages</li>
+                            <li className="nav-item ms-2 my-2">Dashboard</li>
                             <li className="nav-item">
                                 <NavLink to={'/main/courses'} className="nav-link" role="button" aria-expanded="true" >
                                     <i className="fas fa-book fa-fw me-2" />My Courses

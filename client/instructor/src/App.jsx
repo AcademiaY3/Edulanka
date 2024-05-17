@@ -1,7 +1,6 @@
 import './App.css'
 import { Route, Routes } from 'react-router-dom'
 import Login from './Pages/Login/Login'
-import DashBoard from './Pages/UserStack/Dashboard/DashBoard'
 import CourseM from './Pages/UserStack/CourseM/CourseM'
 import UserStack from './Pages/UserStack/UserStack'
 import LearnerM from './Pages/UserStack/LearnerM/LearnerM'
@@ -18,8 +17,7 @@ function App() {
         <Route path='/' element={<Login/>} />
         <Route path='/login' element={<Login/>} />
         <Route path='/main' element={<UserStack />} >
-          <Route index element={<DashBoard/>} />
-          <Route path='dashboard' element={<DashBoard/>} />
+          <Route index element={<CourseM/>} />
           <Route path='courses' element={<CourseM/>} />
           <Route path='courses/addcourse' element={<AddCourse/>} />
           <Route path='learners' element={<LearnerM/>} />
