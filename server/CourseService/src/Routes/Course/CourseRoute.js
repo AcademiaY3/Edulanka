@@ -15,8 +15,14 @@ router.get("/getAllCourses", AdminInstCheck,CourseController.getAllCourses);
 // Route to get a course by ID
 router.get("/getCourse/:courseId", AdminInstCheck, CourseController.getCourse);
 
-//get learners enrolled for a instructor
-router.post("/getAllInstructorsLearners",AdminInstCheck,ValidateScehma(CourseYup.getAllInstructorsLearners),(CourseController.getAllInstructorsLearners))
+//get courses of a instructor
+router.post("/getAllInstructorsCourses",AdminInstCheck,ValidateScehma(CourseYup.getAllInstructorsCourses),(CourseController.getAllInstructorsCourses))
+
+//get learners of a instructor
+router.post("/getAllInstructorsLearners",AdminInstCheck,ValidateScehma(CourseYup.getAllInstructorsLearners),CourseController.getAllInstructorsLearners)
+
+// get the learner enrolled courses
+router.post("/getLearnerCourses",ValidateScehma(CourseYup.getLearnerCourses),CourseController.getLearnerCourses)
 
 // Route to delete a course by ID
 router.post("/deleteCourse", AdminInstCheck, ValidateScehma(CourseYup.deleteCourse),CourseController.deleteCourse);

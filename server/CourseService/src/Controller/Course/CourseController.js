@@ -19,12 +19,36 @@ class CourseController {
         }
     }
 
+    //add enrolled learners by rabbit
+    addLearnerByRabbit = async (cid, lid) => {
+        try {
+            const course = await Course.findOne({ _id: cid });
+            if (!course) {
+                return RabbitRes('error', 404, { isSuccess: false, message: "No course found" });
+            } else {
+                // Check if the learner ID is already enrolled in the course
+                const isEnrolled = course.enrolled.some(enrollment => enrollment.learner.toString() === lid);
+                if (isEnrolled) {
+                    return RabbitRes('error', 400, { isSuccess: false, message: "already enrolled" });
+                } else {
+                    // Add the learner to the course with the enrollment date
+                    course.enrolled.push({ learner: lid });
+                    await course.save();
+                    return RabbitRes('success', 200, { isSuccess: true, course });
+                }
+            }
+        } catch (error) {
+            console.log(error);
+            return RabbitRes('error', 500, { isSuccess: false, message: error });
+        }
+    };
+
     // Method to add a new course
     addCourse = async (req, res) => {
         try {
 
             // Extract data from request body
-            const { name, title, price, category, hours, skills, language, certificate, thumbnail, description, tag, instructor, lectures, approved, approved_by } = req.body;
+            const { name, title, price, category, hours, skills, language, certificate, thumbnail, description, tag, instructor, enrolled, lectures, approved, approved_by, outline, added_by } = req.body;
             // Create a new course instance
             const newCourse = new Course({
                 name,
@@ -41,7 +65,10 @@ class CourseController {
                 instructor,
                 lectures,
                 approved,
-                approved_by
+                approved_by,
+                outline,
+                added_by,
+                enrolled
             });
 
             // Save the course to the database
@@ -81,12 +108,69 @@ class CourseController {
         }
     }
 
+    getAllInstructorsCourses = async (req, res) => {
+        const { instructor } = req.body;
+        try {
+            const course = await Course.find({ instructor });
+            if (!course) return response(res, 404, { message: 'course not found' });
+            return response(res, 200, course);
+        } catch (error) {
+            console.log(error);
+            return response(res, 500, { error: error.message });
+        }
+    }
+
     getAllInstructorsLearners = async (req, res) => {
         const { instructor } = req.body;
         try {
-            const course = await Course.find({instructor});
-            if (!course) return response(res, 404, { message: 'course not found' });
-            return response(res, 200, course);
+            let courses = await Course.find({ instructor }).select('name title price thumbnail enrolled');
+            // Filter out courses with no enrolled learners
+            courses = courses.filter(course => course.enrolled.length > 0);
+
+            if (courses.length === 0) return response(res, 404, { message: 'no learners found' });
+
+            // Transform the response to the desired format
+            var enrolled = [];
+            var totalLearners = 0;
+            courses.forEach(course => {
+                // Count learners in each course
+                const learnerCount = course.enrolled.length;
+                totalLearners += learnerCount;
+
+                course.enrolled.forEach(enrolledId => {
+                    enrolled.push({
+                        learner: enrolledId.learner,
+                        enrolled: enrolledId.enrolled_at,
+                        course: {
+                            name: course.name,
+                            title: course.title,
+                            price: course.price,
+                            thumbnail: course.thumbnail
+
+                        }
+                    });
+                });
+            });
+            return response(res, 200, { learners: enrolled, totalCourses: courses.length, totalLearners });
+        } catch (error) {
+            console.log(error);
+            return response(res, 500, { error: error.message });
+        }
+    }
+
+    //get the courses enrolled by the learner
+    getLearnerCourses = async (req, res) => {
+        const { learner } = req.body;
+        try {
+            // Find all courses where the learner is enrolled
+            const courses = await Course.find({ "enrolled.learner": learner }).select('_id');
+
+            if (courses.length === 0) return response(res, 404, { message: 'no courses found' });
+
+            // Extract course IDs
+            const enrolledCourses = courses.map(course => course._id);
+
+            return response(res, 200, { courses: enrolledCourses });
         } catch (error) {
             console.log(error);
             return response(res, 500, { error: error.message });

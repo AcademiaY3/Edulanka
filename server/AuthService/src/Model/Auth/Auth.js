@@ -2,12 +2,7 @@ import mongoose from 'mongoose'
 import gender from '../../Utils/Constants/Gender.js'
 import role from '../../Utils/Constants/Role.js'
 
-const urlPic = [
-    "https://avatars.githubusercontent.com/u/54225118?v=4",
-    "https://avatars.githubusercontent.com/u/22358125?v=4",
-    "https://avatars.githubusercontent.com/u/98579886?v=4",
-    "https://avatars.githubusercontent.com/u/17646305?v=4"
-]
+
 const getRandomDefaultpic = () => {
     const randomIndex = Math.floor(Math.random() * urlPic.length);
     return urlPic[randomIndex];

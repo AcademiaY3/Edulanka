@@ -2,6 +2,16 @@ import mongoose from "mongoose";
 
 const skillType = ['beginner', 'intermediate', 'expert']
 const certificateCheck = ['yes', 'no']
+const urlPic = [
+    "https://avatars.githubusercontent.com/u/54225118?v=4",
+    "https://avatars.githubusercontent.com/u/22358125?v=4",
+    "https://avatars.githubusercontent.com/u/98579886?v=4",
+    "https://avatars.githubusercontent.com/u/17646305?v=4"
+]
+const getRandompic = () => {
+    const randomIndex = Math.floor(Math.random() * urlPic.length);
+    return urlPic[randomIndex];
+}
 const courseSchema = new mongoose.Schema(
     {
         name: {
@@ -47,6 +57,7 @@ const courseSchema = new mongoose.Schema(
         },
         thumbnail: {
             type: String,
+            default:getRandompic(),
             required: true,
         },
         description: {
@@ -61,8 +72,15 @@ const courseSchema = new mongoose.Schema(
         ],
         enrolled: [
             {
-                type: mongoose.Schema.Types.ObjectId,
-                required: true,
+                learner: {
+                    type: mongoose.Schema.Types.ObjectId,
+                    required: true,
+                },
+                enrolled_at: {
+                    type: Date,
+                    default: Date.now,
+                    required: true
+                }
             }
         ],
         instructor: {
