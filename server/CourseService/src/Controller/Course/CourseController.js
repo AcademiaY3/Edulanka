@@ -111,9 +111,15 @@ class CourseController {
     getAllInstructorsCourses = async (req, res) => {
         const { instructor } = req.body;
         try {
-            const course = await Course.find({ instructor });
-            if (!course) return response(res, 404, { message: 'course not found' });
-            return response(res, 200, course);
+            const courses = await Course.find({ instructor });
+            if (!courses) return response(res, 404, { message: 'course not found' });
+
+            // Calculate total courses, approved, and rejected counts
+            const total_courses = courses.length;
+            const approved_courses = courses.filter(course => course.approved).length;
+            const pending_courses = courses.filter(course => !course.approved).length;
+
+            return response(res, 200, {courses,total_courses,approved_courses,pending_courses});
         } catch (error) {
             console.log(error);
             return response(res, 500, { error: error.message });
