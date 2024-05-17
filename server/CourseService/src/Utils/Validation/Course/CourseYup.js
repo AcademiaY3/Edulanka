@@ -44,9 +44,15 @@ class CourseYup {
     deleteCourse = yup.object({
         courseId: yup.string().required(),
     });
-    getAllInstructorsLearners = yup.object({
+    getAllInstructorsCourses = yup.object({
         instructor: yup.string().required(),
     });
+    getAllInstructorsLearners = yup.object({
+        instructor: yup.string().required(),
+    })
+    getLearnerCourses = yup.object({
+        learner: yup.string().required(),
+    })
 }
 
 const courseYup = new CourseYup();

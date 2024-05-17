@@ -7,24 +7,24 @@ class PaymentController {
     addPayment = async (req, res) => {
         try {
             // Extract data from request body
-            const { order_id,pay_status_message, pay_status_code } = req.body;
+            const { order_id, pay_status_message, pay_status_code } = req.body;
 
             var pay_status_boolean = false
             if (pay_status_code == 2) {
                 pay_status_boolean = true
-            } 
+            }
 
             //send to course for verify course
             const payStatusByOrder = await SendPayStatus(order_id, pay_status_boolean)
             if (payStatusByOrder && payStatusByOrder.sent_status === 'success') {
                 // Create a new payment instance
                 const newPayment = new Payment({
-                    course_id:payStatusByOrder.data.order.course_id,
-                    order_id:payStatusByOrder.data.order._id,
-                    instructor_id:payStatusByOrder.data.order.instructor_id,
-                    learner_id:payStatusByOrder.data.order.learner_id,
-                    amount:payStatusByOrder.data.order.price,
-                    course_name:payStatusByOrder.data.order.course_name,
+                    course_id: payStatusByOrder.data.order.course_id,
+                    order_id: payStatusByOrder.data.order._id,
+                    instructor_id: payStatusByOrder.data.order.instructor_id,
+                    learner_id: payStatusByOrder.data.order.learner_id,
+                    amount: payStatusByOrder.data.order.price,
+                    course_name: payStatusByOrder.data.order.course_name,
                     pay_status_message,
                     pay_status_code,
                 });
@@ -86,11 +86,17 @@ class PaymentController {
         const { instructor_id } = req.body;
         console.log(instructor_id)
         try {
-            const payment = await Payment.find({instructor_id});
-            if (payment.length===0)
+            const payments = await Payment.find({ instructor_id });
+            if (payments.length === 0)
                 return response(res, 404, { message: 'Payments not found' });
-            const total = payment.length
-            return response(res, 200, {total,payments:payment});
+
+            // Calculate total pay amount, payment approved, and rejected counts
+            const total = payments.length;
+            const total_amount = payments.reduce((acc, payment) => acc + payment.amount, 0);
+            const approved_payments = payments.filter(payment => payment.approved).length;
+            const pending_payments = payments.filter(payment => !payment.approved).length;
+
+            return response(res, 200, { total, payments,total_amount,approved_payments,pending_payments });
         } catch (error) {
             console.log(error);
             return response(res, 500, { error: error.message });

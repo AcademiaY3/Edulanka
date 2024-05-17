@@ -2,6 +2,7 @@ import GetCourse from "../../Helpers/Course/GetCourse.js";
 import Order from "../../Model/Order/Order.js";
 import response from "../../Utils/ResponseHandler/ResponseHandler.js";
 import RabbitRes from "../../Utils/Constants/RabbitRes.js";
+import LearnerCourse from "../../Helpers/Course/LearnerCourse.js";
 
 class OrderController {
     //update the pay_status_by res
@@ -35,24 +36,35 @@ class OrderController {
             const { course_id, instructor_id, learner_id, delivery_address, delivery_city, delivery_country, zip_code } = req.body;
 
             //send to course for verify course
-            const courseByService = await GetCourse(course_id)
+            const courseByService = await LearnerCourse(course_id)
             if (courseByService && courseByService.sent_status === 'success') {
                 //save the order
                 // Create a new order instance
                 const newOrder = new Order({
-                    orderId:id,
+                    // orderId:id,
+                    course_name: courseByService.data.course.name,
+                    price: courseByService.data.course.price,
+                    instructor_id,
+                    learner_id,
+                    course_id,
                     delivery_address,
                     delivery_city,
                     delivery_country,
                     zip_code
                 });
 
-                // Save the order to the database
-                const savedOrder = await newOrder.save();
-                if (savedOrder)
-                    return response(res, 200, { message: 'Order added' });
-                else
-                    return response(res, 403, { message: 'Order adding failed' });
+                const storeEnrolledLearner = await LearnerCourse(course_id, learner_id)
+                // console.log(storeEnrolledLearner)
+                if (storeEnrolledLearner.code === 400) {
+                    return response(res, 400, { message: 'already enrolled' });
+                }
+                else {
+                    const savedOrder = await newOrder.save();
+                    if (savedOrder)
+                        return response(res, 200, { message: 'Order added' });
+                    else
+                        return response(res, 200, { message: 'Order failed' });
+                }
             } else {
                 return response(res, 403, { message: 'not a valid course' });
             }
