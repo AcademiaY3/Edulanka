@@ -53,17 +53,18 @@ class OrderController {
                     zip_code
                 });
 
-                // Save the order to the database
-                const savedOrder = await newOrder.save();
-                if (savedOrder) {
-                    const storeEnrolledLearner = await LearnerCourse(savedOrder.course_id, savedOrder.learner_id)
-                    console.log(storeEnrolledLearner)
-                    if (storeEnrolledLearner.code === 400)
-                        return response(res, 400, { message: 'already enrolled' });
-                    return response(res, 200, { message: 'Order added' });
+                const storeEnrolledLearner = await LearnerCourse(course_id, learner_id)
+                // console.log(storeEnrolledLearner)
+                if (storeEnrolledLearner.code === 400) {
+                    return response(res, 400, { message: 'already enrolled' });
                 }
-                else
-                    return response(res, 403, { message: 'Order adding failed' });
+                else {
+                    const savedOrder = await newOrder.save();
+                    if (savedOrder)
+                        return response(res, 200, { message: 'Order added' });
+                    else
+                        return response(res, 200, { message: 'Order failed' });
+                }
             } else {
                 return response(res, 403, { message: 'not a valid course' });
             }

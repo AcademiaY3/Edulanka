@@ -13,12 +13,12 @@ const CidListener = async () => {
 
         channel.consume(queue, async (msg) => {
             const cid = JSON.parse(msg.content.toString())
-            console.log(`Received course request: ${JSON.stringify(cid)}`);
+            // console.log(`Received course request: ${JSON.stringify(cid)}`);
             console.log(`Received course Id request`);
 
             if (cid.data.lid){
                 response = await CourseController.addLearnerByRabbit(cid.data.cid, cid.data.lid)
-                console.log(response)
+                // console.log(response)
             }
             else{
                 response = await CourseController.getCourseByRabbit(cid.data.cid)
