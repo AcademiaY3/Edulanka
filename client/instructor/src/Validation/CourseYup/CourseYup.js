@@ -9,7 +9,7 @@ class CourseYup {
         hours: yup.number().required().positive(),
         skills: yup.string().required(),
         language: yup.string().required(),
-        tags: yup.string().required(),
+        tag: yup.string().required(),
         certificate: yup.string().oneOf(['yes','no']).required(),
     });
 }

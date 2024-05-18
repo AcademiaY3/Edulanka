@@ -91,7 +91,7 @@ const courseSchema = new mongoose.Schema(
             {
                 thumbnail: {
                     type: String,
-                    required: true,
+                    // required: true,
                 },
                 video: {
                     type: String,
@@ -101,7 +101,7 @@ const courseSchema = new mongoose.Schema(
                     type: String,
                     required: true,
                 },
-                description: {
+                quiz: {
                     type: String,
                     required: true,
                 },
@@ -123,7 +123,7 @@ const courseSchema = new mongoose.Schema(
         },
         approved_by: {
             type: mongoose.Schema.Types.ObjectId,
-            // required: true,
+            required: false,
         }
     },
     {

@@ -28,7 +28,7 @@ export default function LoginForm() {
                     // result.data.data.message
                     Toaster.justToast('success', 'letting you in', () => {
                         Toaster.dismissLoadingToast()
-                        navigate('/main/dashboard')
+                        navigate('/main/courses')
                     })
                 }
             } catch (error) {
