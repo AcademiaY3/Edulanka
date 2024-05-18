@@ -40,9 +40,9 @@ export default function SideBar() {
                                 <NavLink className="nav-link" to={'/main/payments'}><i className="far fa-chart-bar fa-fw me-2" />Payments</NavLink>
                             </li>
                             <li className="nav-item ms-2 my-2">Requests</li>
-                            <li className="nav-item">
+                            {/* <li className="nav-item">
                                 <NavLink className="nav-link" to={'/main/profile'}><i className="far fa-user fa-fw me-2" />My Profile</NavLink>
-                            </li>
+                            </li> */}
                             <li className="nav-item">
                                 <button onClick={logoutUser} className="nav-link" ><i className="fas fa-power-off fa-fw me-2" />Logout</button>
                             </li>
