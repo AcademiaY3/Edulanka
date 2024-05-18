@@ -6,7 +6,7 @@ class GarbageService {
     constructor() {
         BaseService.getBaseURL();
         this.ADD_COURSE = "course/service/addCourse";
-        this.GET_ALL = "course/service/getAllCourses";
+        this.GET_ALL_INSTRUCTORS = "course/service/getAllInstructorsCourses";
     }
     addCourse(input) {
         console.log(input.lectures.video)
@@ -31,18 +31,14 @@ class GarbageService {
         return axios.post(this.ADD_COURSE, data, BaseService.getHeader());
     }
 
-    getAllCourse() {
-        return axios.get(this.GET_ALL, BaseService.getHeader())
+    getAllInstructorsCourses() {
+        let data = {
+            instructor:LocalStore.getToken().user._id
+        }
+        return axios.post(this.GET_ALL_INSTRUCTORS,data, BaseService.getHeader())
     }
 
-    // updateCourse(id) {
-    //     let data = {
-    //         deliveryId: id,
-    //         field: "shipped",
-    //         value:true
-    //     };
-    //     return axios.put(this.UPDATE_COURSE, data, BaseService.getHeader());
-    // }
+    
 }
 
 export default GarbageService = new GarbageService();

@@ -1,33 +1,37 @@
-import React from 'react'
+import React from 'react';
+import formatDate from '../../../Utils/Constants/FormatDate';
 
-export default function CourseList() {
+export default function CourseList({ courses }) {
+    console.log(courses)
     return (
         <>
-            <tr>
-                <td>
-                    <div className="d-flex align-items-center position-relative">
-                        <div className="avatar avatar-md">
-                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfsMF2wUfsZhHrnC52ryuy5NlaYc9m_MbtJ9kHg4raBQ&s" className="rounded-circle" alt />
-                        </div>
-                    </div>
-                </td>
-                <td>Adobe</td>
-                <td>title 01</td>
-                <td>Rs 21.00</td>
-                <td>English</td>
-                <td>19th june 2021</td>
-                <td>
-                    <a href="#" className="btn btn-light btn-round me-1 mb-1 mb-md-0" data-bs-toggle="tooltip" data-bs-placement="top" title="View">
-                        <i className="fas fa-eye text-success" />
-                    </a>
-                    <a href="#" className="btn btn-light btn-round me-1 mb-1 mb-md-0" data-bs-toggle="tooltip" data-bs-placement="top" title="Message">
-                        <i className="fas fa-edit text-warning" />
-                    </a>
-                    <button className="btn btn-light btn-round mb-0" data-bs-toggle="tooltip" data-bs-placement="top" title="Block">
-                        <i className="fas fa-trash text-danger" />
-                    </button>
-                </td>
-            </tr>
+            {courses.length === 0 ? (
+                <h1>No courses</h1>
+            ) : (
+                courses.map((course, index) => (
+                    <tr key={index}>
+                        <td>
+                            <img src="https://firebasestorage.googleapis.com/v0/b/edulanka-2874b.appspot.com/o/videos%2F1716072947136bannerMain.jpg?alt=media&token=55cf3c9e-4e0a-461f-803c-ccb76a314f3e" className="img-fluid rounded-2" style={{ width: '80px' }} alt="Course Thumbnail" />
+                        </td>
+                        <td>{course.name}</td>
+                        <td>{course.title}</td>
+                        <td>{course.price}</td>
+                        <td>{course.language}</td>
+                        <td>{formatDate(course.createdAt)}</td>
+                        <td>
+                            <a  className="btn btn-light btn-round me-1 mb-1 mb-md-0" data-bs-toggle="tooltip" data-bs-placement="top" title="View">
+                                <i className="fas fa-eye text-success" />
+                            </a>
+                            <a  className="btn btn-light btn-round me-1 mb-1 mb-md-0" data-bs-toggle="tooltip" data-bs-placement="top" title="Message">
+                                <i className="fas fa-edit text-warning" />
+                            </a>
+                            <button className="btn btn-light btn-round mb-0" data-bs-toggle="tooltip" data-bs-placement="top" title="Block">
+                                <i className="fas fa-trash text-danger" />
+                            </button>
+                        </td>
+                    </tr>
+                ))
+            )}
         </>
-    )
+    );
 }
