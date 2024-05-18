@@ -12,11 +12,10 @@ class CourseYup {
         certificate: yup.string().oneOf(['yes', 'no']).required(),
         thumbnail: yup.string().required(),
         description: yup.string().required(),
-        tag: yup.array().of(yup.string().required()).required(),
+        tag: yup.string().required(),
+        // tag: yup.array().of(yup.string().required()).required(),
         instructor: yup.string().required(),
         lectures: yup.array().required(),
-        approved: yup.boolean().required(),
-        approved_by: yup.string().required(),
     });
 
     updateCourse = yup.object({

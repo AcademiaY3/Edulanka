@@ -12,8 +12,11 @@ import { MediaPlayer, MediaProvider } from '@vidstack/react';
 import { defaultLayoutIcons, DefaultVideoLayout } from '@vidstack/react/player/layouts/default';
 import { storage, app } from '../../../Config/FireBase/FireBase';
 import { ref, getStorage, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import LocalStore from '../../../Config/LocalStore/LocalStore';
+import { useNavigate } from 'react-router-dom';
 
 export default function AddCourse() {
+  const navigate = useNavigate()
   const [uploadProgress, setUploadProgress] = useState(0);
   const [loading, setLoading] = useState(false)
   const [initValue, setInitValue] = useState({
@@ -25,18 +28,17 @@ export default function AddCourse() {
     hours: '',
     skills: '',
     language: '',
-    tags: '',
+    tag: '',
     outline: '',
     thumbnail: '',
-    added_by:'',
     description: 'enter course description',
     lectures: [{
       video: 'https://firebasestorage.googleapis.com/v0/b/edulanka-2874b.appspot.com/o/videos%2F1715764287967%E0%B6%B1%E0%B7%92%E0%B7%80%E0%B7%90%E0%B6%BB%E0%B6%AF%E0%B7%92%E0%B7%80%20Video%20Upload%20%E0%B6%9A%E0%B6%BB%E0%B6%B1%E0%B7%8A%E0%B6%B1%E0%B7%99%20%E0%B6%9A%E0%B7%9C%E0%B7%84%E0%B7%9C%E0%B6%B8%E0%B6%AF.%20-%20How%20to%20Upload%20Videos%20on%20YouTube%20in%20Sinhala%202022.mp4?alt=media&token=13ee3ed7-105d-4636-a652-4fbde2317fa8',
       note: '',
-      quiz: ''
+      quiz: 'https://firebasestorage.googleapis.com/v0/b/edulanka-2874b.appspot.com/o/pdf%2FAPI%20Endpoints%20(1).pdf?alt=media&token=b5568d27-da39-412d-a4e2-e13c41984e0c'
     }],
   });
-  const { values, handleChange, handleSubmit, errors, touched } = useFormik({
+  const { values, handleChange, handleSubmit, errors, touched, setValues } = useFormik({
     initialValues: initValue,
     validationSchema: CourseYup.addCourse,
     onSubmit: async (values) => {
@@ -44,8 +46,7 @@ export default function AddCourse() {
       Toaster.loadingToast("Adding Course .......")
       try {
         const result = await CourseService.addCourse(values)
-        if (result.data.code === 201) {
-
+        if (result.data.code === 200) {
           Toaster.justToast('success', result.data.data.message, () => {
             // Toaster.dismissLoadingToast()
             navigate('/main/courses')
@@ -99,17 +100,32 @@ export default function AddCourse() {
           Toaster.dismissLoadingToast()
           setLoading(false)
           setUploadProgress(0)
-          Toaster.justToast('primary', 'Material Uploaded', () => { })
-          if (name === "note" || name === "photo" || name === "video") {
+          Toaster.justToast('success', 'Material Uploaded', () => { })
+          if (name === "note" || name === "quiz" || name === "video") {
+            const updatedLectures = values.lectures.map((lecture, i) =>
+              i === index ? { ...lecture, [name]: downloadURL } : lecture
+            );
             setInitValue({
               ...initValue,
-              lectures: initValue.lectures.map((lecture, i) =>
-                i === index ? { ...lecture, [name]: downloadURL } : lecture
-              ),
+              lectures: updatedLectures
             });
-          } else if (name === 'outline' || name === 'thumbnail') {
+            // setInitValue({
+            //   ...initValue,
+            //   lectures: initValue.lectures.map((lecture, i) =>
+            //     i === index ? { ...lecture, [name]: downloadURL } : lecture
+            //   )
+            // });
+            setValues({
+              ...values,
+              lectures: updatedLectures
+            });
+          }
+          if (name === 'outline' || name === 'thumbnail') {
             setInitValue({
               ...initValue, [name]: downloadURL
+            })
+            setValues({
+              ...values, [name]: downloadURL
             })
           }
         });
@@ -203,15 +219,13 @@ export default function AddCourse() {
                 </div>
                 {/* Skills */}
                 <div className="col-md-3">
-                  <input
-                    type="text"
-                    name='skills'
-                    className={`form-control ${(errors.skills && touched.skills) ? 'is-invalid' : ''}`}
-                    value={values.skills}
-                    onChange={handleChange}
-                    placeholder="Skills"
-                    aria-label="Skills"
-                    required />
+                  <select onChange={handleChange} value={values.skills}
+                    className={`form-control ${(errors.skills && touched.skills) ? 'is-invalid' : ''}`} name="skills" id="">
+                    <option selected value="">choose....</option>
+                    <option selected value="beginner">beginner</option>
+                    <option selected value="intermediate">intermediate</option>
+                    <option selected value="expert">expert</option>
+                  </select>
                   <div className="invalid-feedback">
                     {errors.skills}
                   </div>
@@ -235,15 +249,15 @@ export default function AddCourse() {
                 <div className="col-md-3">
                   <input
                     type="text"
-                    name='tags'
-                    className={`form-control ${(errors.tags && touched.tags) ? 'is-invalid' : ''}`}
-                    value={values.tags}
+                    name='tag'
+                    className={`form-control ${(errors.tag && touched.tag) ? 'is-invalid' : ''}`}
+                    value={values.tag}
                     onChange={handleChange}
                     placeholder="Tags (comma separated)"
                     aria-label="Tags"
                     required />
                   <div className="invalid-feedback">
-                    {errors.tags}
+                    {errors.tag}
                   </div>
                 </div>
                 <div className="row row-gap-4">
@@ -290,6 +304,7 @@ export default function AddCourse() {
                             id={`video-upload-${index}`}
                             accept="video/*"
                             name={`video`}
+                            // value={lecture.video}
                             onChange={(e) => handleLectureChange(index, e)}
                             required
                           />
@@ -302,6 +317,7 @@ export default function AddCourse() {
                             id={`note-upload-${index}`}
                             accept="image/*"
                             name={`note`}
+                            // value={lecture.note}
                             onChange={(e) => handleLectureChange(index, e)}
                             required
                           />
@@ -313,6 +329,7 @@ export default function AddCourse() {
                             className={`form-control`}
                             id={`quiz-upload-${index}`}
                             accept="image/*"
+                            // value={lecture.quiz}
                             name={`quiz`}
                             onChange={(e) => handleLectureChange(index, e)}
                             required
