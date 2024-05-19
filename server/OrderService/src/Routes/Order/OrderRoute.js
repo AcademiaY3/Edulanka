@@ -6,7 +6,7 @@ import OrderYup from "../../Utils/Validation/Order/OrderYup.js";
 import AdminInstructorCheck from "../../MiddleWare/Privileges/AdminInstructor.js";
 
 // Route to add a new order
-router.post("/addOrder", AdminInstructorCheck, ValidateSchema(OrderYup.addOrder), OrderController.addOrder);
+router.post("/addOrder", ValidateSchema(OrderYup.addOrder), OrderController.addOrder);
 
 // Route to get all orders
 router.get("/getAllOrders", AdminInstructorCheck, OrderController.getAllOrders);

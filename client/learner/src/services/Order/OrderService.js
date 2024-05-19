@@ -4,10 +4,10 @@ import BaseService from "../Base/BaseService";
 class OrderService {
     constructor() {
         BaseService.getBaseURL()
-        this.GET_order = "service/getOrder"
-        this.GET_ALL = "service/getAllOrders"
-        this.ADD_ORDER = "service/addOrder"
-        this.DELETE_ORDER="service/deleteOrder"
+        this.GET_order = "order/service/getOrder"
+        this.GET_ALL = "order/service/getAllOrders"
+        this.ADD_ORDER = "order/service/addOrder"
+        this.DELETE_ORDER="order/service/deleteOrder"
     }
     getAllOrders() {
         return axios.get(this.GET_ALL)
@@ -20,7 +20,9 @@ class OrderService {
     }
     addOrder(input) {
         let data = {
-
+            course_id:input.course_id,
+            instructor_id:input.instructor_id,
+            learner_id:input.learner_id,
             delivery_address: input.delivery_address,
             delivery_country: input.delivery_country,
             delivery_city: input.delivery_city,
