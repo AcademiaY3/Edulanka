@@ -15,10 +15,12 @@ export default function CourseM() {
         try {
             setLoading(true)
             const result = await CourseService.getAllInstructorsCourses()
-            setTotalApproved(result.data.data.approved_courses)
-            setTotalCourses(result.data.data.total_courses)
-            setTotalPending(result.data.data.pending_courses)
-            setCourses(result.data.data.courses)
+            if (result) {
+                setTotalApproved(result.data.data.approved_courses)
+                setTotalCourses(result.data.data.total_courses)
+                setCourses(result.data.data.courses)
+                setTotalPending(result.data.data.pending_courses)
+            }
         } catch (error) {
             alert(error)
         } finally {
@@ -31,7 +33,7 @@ export default function CourseM() {
     return (
         <div className="page-content-wrapper border">
             {loading ? (
-                <div className="d-flex justify-content-center align-items-center" style={{height:'70vh'}}>
+                <div className="d-flex justify-content-center align-items-center" style={{ height: '70vh' }}>
                     <div className="spinner-border" role="status">
                         <span className="visually-hidden">Loading...</span>
                     </div>
@@ -48,19 +50,19 @@ export default function CourseM() {
                         <div className="col-sm-6 col-lg-4">
                             <div className="text-center p-4 bg-primary bg-opacity-10 border border-primary rounded-3">
                                 <h6>Total Courses</h6>
-                                    <h2 className="mb-0 fs-1 text-primary">{totalCourses}</h2>
+                                <h2 className="mb-0 fs-1 text-primary">{totalCourses}</h2>
                             </div>
                         </div>
                         <div className="col-sm-6 col-lg-4">
                             <div className="text-center p-4 bg-success bg-opacity-10 border border-success rounded-3">
                                 <h6>Activated Courses</h6>
-                                    <h2 className="mb-0 fs-1 text-success">{ totalApproved}</h2>
+                                <h2 className="mb-0 fs-1 text-success">{totalApproved}</h2>
                             </div>
                         </div>
                         <div className="col-sm-6 col-lg-4">
                             <div className="text-center p-4  bg-warning bg-opacity-15 border border-warning rounded-3">
                                 <h6>Pending Courses</h6>
-                                    <h2 className="mb-0 fs-1 text-warning">{totalPending}</h2>
+                                <h2 className="mb-0 fs-1 text-warning">{totalPending}</h2>
                             </div>
                         </div>
                     </div>
@@ -80,12 +82,12 @@ export default function CourseM() {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                            <CourseList courses={courses} />
+                                        <CourseList courses={courses} />
                                     </tbody>
                                 </table>
                             </div>
                         </div>
-                            <Pagination total={totalCourses} />
+                        <Pagination total={totalCourses} />
                     </div>
                 </>
             )}

@@ -95,7 +95,18 @@ class OrderController {
             if (order.length === 0)
                 return response(res, 404, { message: 'orders not found' });
             const total = order.length
-            return response(res, 200, { total, orders: order });
+            const allOrders = await Order.countDocuments({});
+            const approved = await Order.countDocuments({instructor_id,approved:true})
+            const pending = await Order.countDocuments({instructor_id,approved:false})
+            // const deletedOrders = await Order.countDocuments({ deleted: true });
+            // const notDeleted = await Order.countDocuments({ deleted: false });
+            return response(res, 200, {
+                total,
+                allOrders,
+                pending,
+                approved,
+                orders: order
+            });
         } catch (error) {
             console.log(error);
             return response(res, 500, { error: error.message });
