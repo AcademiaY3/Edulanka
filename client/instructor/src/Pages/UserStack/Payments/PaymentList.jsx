@@ -1,19 +1,31 @@
 import React from 'react'
+import formatDate from '../../../Utils/Constants/FormatDate'
 
-export default function PaymentList() {
+export default function PaymentList({ pays }) {
+  console.log(pays)
   return (
     <>
-      <tr>
-        <td>662df401bbacfd381da3f148</td>
-        <td>662df401bbacfd381da3f148</td>
-        <td>Rs 2000.00</td>
-        <td>Adobe</td>
-        <td className='text-center'>
-          ✅
-          {/* ❌ */}
-        </td>
-        <td>19ht jun 2023</td>
-      </tr>
+      {pays.length === 0 ? (
+        <>
+          <h5>no payments</h5>
+        </>) : (
+        pays.map((pay) => (
+          <tr>
+            <td>{pay._id}</td>
+            <td>{pay.learner_id}</td>
+            <td>Rs {pay.amount}.00</td>
+            <td>{pay.course_name}</td>
+            <td className='text-center'>
+              {pay.approved ? (
+                `✅`
+              ) : (
+                `❌`
+              )}
+            </td>
+            <td>{formatDate(pay.createdAt)}</td>
+          </tr>
+        ))
+      )}
     </>
   )
 }
