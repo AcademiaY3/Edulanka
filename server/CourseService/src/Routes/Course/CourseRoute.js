@@ -10,10 +10,10 @@ import AdminInstCheck from "../../MiddleWare/Privileges/AdminInstCheck.js";
 router.post("/addCourse", AdminInstCheck, ValidateScehma(CourseYup.addCourse), CourseController.addCourse);
 
 // Route to get all courses
-router.get("/getAllCourses", AdminInstCheck,CourseController.getAllCourses);
+router.get("/getAllCourses", CourseController.getAllCourses);
 
 // Route to get a course by ID
-router.get("/getCourse/:courseId", AdminInstCheck, CourseController.getCourse);
+router.get("/getCourse/:courseId", CourseController.getCourse);
 
 //get courses of a instructor
 router.post("/getAllInstructorsCourses",AdminInstCheck,ValidateScehma(CourseYup.getAllInstructorsCourses),(CourseController.getAllInstructorsCourses))
