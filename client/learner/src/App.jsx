@@ -28,10 +28,10 @@ function App() {
           <Route path='home' element={<Home/>} />
           <Route path='about' element={<About/>} />
           <Route path='company' element={<Company/>} />
-          <Route path='enrolledcourse' element={<EnrolledCourse/>} />
           <Route path='courses' element={<CauseGrid/>} />
           <Route path='courses/:id' element={<CourseDetail/>} />
           <Route path='courses/checkout/:id' element={<PlaceOrder/>} />
+          <Route path='courses/enrolledcourse/:id' element={<EnrolledCourse/>} />
           <Route path='userprofile' element={<UserProfile />} >
             <Route path='mycourse' element={<MyCourse/>} />
             <Route path='myprofile' element={<MyProfile/>} />

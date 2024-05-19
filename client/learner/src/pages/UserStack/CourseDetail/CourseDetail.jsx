@@ -1,14 +1,42 @@
 import '@vidstack/react/player/styles/default/theme.css';
 import '@vidstack/react/player/styles/default/layouts/video.css';
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import img21 from '../../../assets/images/courses/4by3/21.jpg'
 import img01 from '../../../assets/images/courses/4by3/01.jpg'
 import img18 from '../../../assets/images/courses/4by3/18.jpg'
 import { MediaPlayer, MediaProvider } from '@vidstack/react';
 import { defaultLayoutIcons, DefaultVideoLayout } from '@vidstack/react/player/layouts/default';
+import { Link, useParams } from 'react-router-dom';
+import CourseService from '../../../services/Course/CourseService';
+import formatDate from '../../../utils/Constants/FormatDate';
+import LocalStore from '../../../store/LocalStore';
+import CourseIncludes from './CourseIncludes';
 
 export default function CourseDetail() {
+  const { id } = useParams()
+  const [loading, setLoading] = useState(false)
+  const [course, setCourse] = useState({})
+  const [isEnrolled, setIsEnrolled] = useState(false);
+  const learnerId = LocalStore.getToken().user._id
+  const fetchCourse = async () => {
+    try {
+      setLoading(true)
+      const result = await CourseService.getCourseyById(id)
+      // alert(result.data.data)
+      if (result) {
+        setCourse(result.data.data)
+
+      }
+    } catch (error) {
+      alert(error)
+    } finally {
+      setLoading(false)
+    }
+  }
+  useEffect(() => {
+    fetchCourse()
+  }, [])
   return (
     <>
       <section className="bg-light py-0 py-sm-5">
@@ -16,21 +44,25 @@ export default function CourseDetail() {
           <div className="row py-5">
             <div className="col-lg-7 d-flex flex-column justify-content-center align-items-start">
               {/* Badge */}
-              <h6 className="mb-3 font-base bg-primary text-white py-2 px-4 rounded-2 d-inline-block">Digital Marketing</h6>
+              <h6 className="mb-3 font-base bg-primary text-white py-2 px-4 rounded-2 d-inline-block">{course.category}</h6>
               {/* Title */}
-              <h1>The Complete Digital Marketing Course - 12 Courses in 1</h1>
-              <p>Satisfied conveying a dependent contented he gentleman agreeable do be. Warrant private blushes removed an in equally totally if. Delivered dejection necessary objection do Mr prevailed. Mr feeling does chiefly cordial in do.</p>
+              <h1>The Complete {course.title} Course - {course.lectures !== undefined ? course.lectures.length : ''} Courses in 1</h1>
+              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum necessitatibus, earum magnam maiores cum laudantium laborum illum nihil, harum corporis dicta nesciunt nam magni in dolores, rem impedit praesentium obcaecati!</p>
               {/* Content */}
               <ul className="list-inline mb-0">
                 <li className="list-inline-item h6 me-3 mb-1 mb-sm-0"><i className="fas fa-star text-warning me-2" />4.5/5.0</li>
-                <li className="list-inline-item h6 me-3 mb-1 mb-sm-0"><i className="fas fa-user-graduate text-orange me-2" />12k Enrolled</li>
-                <li className="list-inline-item h6 me-3 mb-1 mb-sm-0"><i className="fas fa-signal text-success me-2" />All levels</li>
-                <li className="list-inline-item h6 me-3 mb-1 mb-sm-0"><i className="faf fa-patch-exclamation-fill text-danger me-2" />Last updated 09/2021</li>
-                <li className="list-inline-item h6 mb-0"><i className="fas fa-globe text-info me-2" />English</li>
+                <li className="list-inline-item h6 me-3 mb-1 mb-sm-0"><i className="fas fa-user-graduate text-orange me-2" />
+                  {course.enrolled !== undefined ? course.enrolled.length : ''}  Enrolled
+                </li>
+                <li className="list-inline-item h6 me-3 mb-1 mb-sm-0 text-capitalize"><i className="fas fa-signal text-success me-2" />{course.skills}</li>
+                <li className="list-inline-item h6 me-3 mb-1 mb-sm-0"><i className="faf fa-patch-exclamation-fill text-danger me-2" />
+                  Last updated {formatDate(course.updatedAt)}
+                </li>
+                <li className="list-inline-item h6 mb-0 text-capitalize"><i className="fas fa-globe text-info me-2" />{course.language}</li>
               </ul>
             </div>
             <div className="col-lg-5">
-              <img src={img18} className="img-fluid rounded-3" alt="" />
+              <img src={course.thumbnail} className="img-fluid rounded-3" alt="" />
             </div>
           </div>
         </div>
@@ -44,9 +76,7 @@ export default function CourseDetail() {
                   <div >
                     {/* Course detail START */}
                     <h5 className="mb-3">Course Description</h5>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis vel ipsa illo reiciendis totam velit voluptatibus! Amet eligendi veritatis, eos, quia culpa explicabo alias nulla earum molestiae aut eveniet voluptatibus repudiandae praesentium sint corporis pariatur temporibus hic quis saepe vero laboriosam. Autem modi expedita odit earum? Incidunt corrupti at doloremque, tempora rem voluptates laudantium corporis tenetur nam maiores obcaecati porro inventore et, molestiae repellendus vero deserunt nisi. Ullam, totam perferendis debitis recusandae perspiciatis sunt cumque ea dolorum eaque, molestiae dolores inventore repellendus et aspernatur corrupti eos. Repudiandae, earum! Perferendis a facere ex dolore veniam odit corporis placeat! Vero, sit nostrum.</p>
-                    {/* List content */}
-
+                    <p>{course.description}</p>
                   </div>
                 </div>
               </div>
@@ -70,7 +100,7 @@ export default function CourseDetail() {
                   {/* Video START */}
                   <div className="card shadow-sm p-2 mb-4 z-index-9">
                     <div className="m-auto">
-                      <MediaPlayer title="Sprite Fight" src="https://firebasestorage.googleapis.com/v0/b/fir-ce055.appspot.com/o/videos%2F1714270280282Learn%20SQL%20In%2060%20Minutes.mp4?alt=media&token=6b597b27-a390-4813-a43b-5326b8bda263">
+                      <MediaPlayer title="Sprite Fight" src={course.lectures != undefined ? course.lectures[0].video : ''}>
                         <MediaProvider />
                         <DefaultVideoLayout thumbnails="https://files.vidstack.io/sprite-fight/thumbnails.vtt" icons={defaultLayoutIcons} />
                       </MediaPlayer>
@@ -82,54 +112,32 @@ export default function CourseDetail() {
                         {/* Price and time */}
                         <div>
                           <div className="d-flex align-items-center">
-                            <h3 className="fw-bold mb-0 me-2">$150</h3>
-                            <span className="text-decoration-line-through mb-0 me-2">$350</span>
+                            <h3 className="fw-bold mb-0 me-2">Rs {course.price}.00</h3>
+                            <span className="text-decoration-line-through mb-0 me-2">Rs {(course.price) + 259}.00</span>
                             <span className="badge text-bg-orange mb-0">60% off</span>
                           </div>
                           <p className="mb-0 text-danger"><i className="fas fa-stopwatch me-2" />5 days left at this price</p>
                         </div>
-                        {/* Share button with dropdown */}
-                        <button>sdf</button>
                       </div>
                       {/* Buttons */}
                       <div className="mt-3 w-100">
-                        <a href="#" className="btn btn-success mb-0 w-100">Buy course</a>
+                        {
+                          course.enrolled !== undefined ? (
+                            course.enrolled.some(enrollment => enrollment.learner == learnerId) ? (
+                              <Link to={`/main/courses/enrolledcourse/${course._id}`} className="btn btn-danger mb-0 w-100">Visit course</Link>
+                            ) : (
+                              <Link to={`/main/courses/checkout/${course._id}`} className="btn btn-success mb-0 w-100">Buy course</Link>
+                            )
+                          ) : (
+                            <></>
+                          )
+                        }
                       </div>
                     </div>
                   </div>
                   {/* Video END */}
                   {/* Course info START */}
-                  <div className="card card-body shadow-sm p-4 mb-4">
-                    {/* Title */}
-                    <h4 className="mb-3">This course includes</h4>
-                    <ul className="list-group list-group-borderless">
-                      <li className="list-group-item d-flex justify-content-between align-items-center">
-                        <span className="h6 fw-light mb-0"><i className="fas fa-fw fa-book-open text-primary" />Lectures</span>
-                        <span>30</span>
-                      </li>
-                      <li className="list-group-item d-flex justify-content-between align-items-center">
-                        <span className="h6 fw-light mb-0"><i className="fas fa-fw fa-clock text-primary" />Duration</span>
-                        <span>4h 50m</span>
-                      </li>
-                      <li className="list-group-item d-flex justify-content-between align-items-center">
-                        <span className="h6 fw-light mb-0"><i className="fas fa-fw fa-signal text-primary" />Skills</span>
-                        <span>Beginner</span>
-                      </li>
-                      <li className="list-group-item d-flex justify-content-between align-items-center">
-                        <span className="h6 fw-light mb-0"><i className="fas fa-fw fa-globe text-primary" />Language</span>
-                        <span>English</span>
-                      </li>
-                      <li className="list-group-item d-flex justify-content-between align-items-center">
-                        <span className="h6 fw-light mb-0"><i className="fas fa-fw fa-user-clock text-primary" />Deadline</span>
-                        <span>Nov 30 2021</span>
-                      </li>
-                      <li className="list-group-item d-flex justify-content-between align-items-center">
-                        <span className="h6 fw-light mb-0"><i className="fas fa-fw fa-medal text-primary" />Certificate</span>
-                        <span>Yes</span>
-                      </li>
-                    </ul>
-                  </div>
-                  {/* Course info END */}
+                  <CourseIncludes course={course} />
                 </div>
               </div>{/* Row End */}
             </div>

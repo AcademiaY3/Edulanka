@@ -6,7 +6,12 @@ class BaseService{
         axios.defaults.baseURL = "http://localhost:8500/api/v1/"
     }
     getHeader() {
-        return { headers: { Authorization: `Bearer ${LocalStore.getToken().token}` } }
+        return {
+            headers: {
+                Authorization: `Bearer ${LocalStore.getToken().token}`,
+                role:'learner'
+            }
+        }
     }
     getBaseURL() {
         return this.baseURL;

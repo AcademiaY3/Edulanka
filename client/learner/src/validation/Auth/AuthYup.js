@@ -2,8 +2,9 @@ import * as yup from 'yup'
 
 class AuthYup {
     registerSchema = yup.object({
-        username: yup.string().required(),
+        name: yup.string().required(),
         password: yup.string().min(8).required(),
+        telephone: yup.string().min(10).max(10).required(),
         email: yup.string().email().required(),
     })
     loginSchema = yup.object({

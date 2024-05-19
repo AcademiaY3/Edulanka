@@ -12,7 +12,8 @@ class AuthService{
             email : input.email,
             password:input.password,
             role:'learner',
-            name:input.username
+            telephone: input.telephone, 
+            name: input.name, 
         }
         return axios.post(this.REGISTER_URL,data)
     }

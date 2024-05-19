@@ -1,92 +1,135 @@
-import React from 'react'
-import logo from '../../assets/logo.png'
-import avatar01 from '../../assets/images/avatar/01.jpg'
-import avatar02 from '../../assets/images/avatar/02.jpg'
-import avatar03 from '../../assets/images/avatar/03.jpg'
-import avatar04 from '../../assets/images/avatar/04.jpg'
-import hero from '../../assets/images/element/02.svg'
+import React, { useState } from 'react'
+import RegisterBanner from './RegisterBanner'
+import { useFormik } from 'formik';
+import AuthYup from '../../validation/Auth/AuthYup';
+import Toaster from '../../utils/Constants/Toaster';
+import AuthService from '../../services/Auth/AuthService';
+import ResponseHandler from '../../utils/Constants/ResponseHandler';
+import { Link } from 'react-router-dom';
 
 export default function Register() {
+    const [loading, setLoading] = useState(false)
+    const { values, handleChange, handleSubmit, errors, touched } = useFormik({
+        initialValues: {
+            name: '',
+            password: '',
+            telephone: '',
+            email: '',
+        },
+        validationSchema: AuthYup.registerSchema,
+        onSubmit: async (values) => {
+            setLoading(true)
+            Toaster.loadingToast("Validating User .......")
+            try {
+                const result = await AuthService.authRegister(values)
+                if (result.data.code === 200) {
+                    // const { token, user } = result.data.data;
+                    Toaster.justToast('success', result.data.data.message, () => {
+                        // Toaster.dismissLoadingToast()
+                        if (user.role === "learner")
+                            navigate('/login')
+                    })
+                }
+            } catch (error) {
+                ResponseHandler.handleResponse(error)
+                // alert(error)
+            } finally {
+                setLoading(false)
+                Toaster.dismissLoadingToast()
+            }
+        },
+    });
     return (
         <section className="p-0 d-flex align-items-center position-relative overflow-hidden">
             <div className="container-fluid">
                 <div className="row">
                     {/* left */}
-                    <div style={{ backgroundColor: 'rgba(255, 133, 27,0.2)' }} className="col-12 col-lg-6 d-md-flex align-items-center justify-content-center bg-opacity-10 vh-lg-100">
-                        <div className="p-3 p-lg-5">
-                            {/* SVG Image */}
-                            <img src={hero} className="d-none d-md-block  mt-0" alt />
-                            {/* Info */}
-                            <div className="text-start text-md-center mt-4 mb-2">
-                                <img className='img-fluid w-50' src={logo} alt="" />
-                            </div>
-                            <div className="d-none d-md-flex align-items-center justify-content-center">
-                                {/* Avatar group */}
-                                <ul className="avatar-group mb-2 mb-sm-0">
-                                    <li className="avatar avatar-sm">
-                                        <img className="avatar-img rounded-circle" src={avatar01} alt="avatar" />
-                                    </li>
-                                    <li className="avatar avatar-sm">
-                                        <img className="avatar-img rounded-circle" src={avatar02} alt="avatar" />
-                                    </li>
-                                    <li className="avatar avatar-sm">
-                                        <img className="avatar-img rounded-circle" src={avatar03} alt="avatar" />
-                                    </li>
-                                    <li className="avatar avatar-sm">
-                                        <img className="avatar-img rounded-circle" src={avatar04} alt="avatar" />
-                                    </li>
-                                </ul>
-                                {/* Content */}
-                                <p className="mb-0 h6 fw-light ms-0 ms-sm-3">4k+ Students joined us, now it's your turn.</p>
-                            </div>
-
-                        </div>
-                    </div>
+                    <RegisterBanner />
                     {/* Right */}
                     <div className="col-12 col-lg-6 m-auto">
                         <div className="row mt-4 my-md-auto">
                             <div className="col-sm-10 col-xl-8 m-auto">
                                 <h1 className="fs-2">
                                     Register To <span className='bg-theme text-theme rounded-2 px-3'>Edulanka</span>
-                                    {/* <img className='img-fluid w-50' src={logo} alt="" /> */}
                                 </h1>
                                 <p className="lead mb-4">Nice to see you! Please Sign up with your account.</p>
                                 {/* Form START */}
-                                <form>
+                                <form className='needs-validation' noValidate onSubmit={handleSubmit}>
+                                    {/* name */}
+                                    <div className="mb-4">
+                                        <div className="input-group input-group-lg">
+                                            <span className="input-group-text bg-light rounded-start border-0 text-secondary px-3">👤</span>
+                                            <input
+                                                type="text"
+                                                className={`form-control border-0 bg-light rounded-end ps-1 ${(errors.name && touched.name) ? 'is-invalid' : ''}`}
+                                                placeholder="Name"
+                                                id="inputName"
+                                                name="name"
+                                                value={values.name}
+                                                onChange={handleChange}
+                                            />
+                                            <div className="invalid-feedback">{errors.name}</div>
+                                        </div>
+                                    </div>
                                     {/* Email */}
                                     <div className="mb-3">
-                                        <label htmlFor="exampleInputEmail1" className="form-label">Email address *</label>
                                         <div className="input-group input-group-lg">
                                             <span className="input-group-text bg-light rounded-start border-0 text-secondary px-3">💌</span>
-                                            <input type="email" className="form-control border-0 bg-light rounded-end ps-1" placeholder="E-mail" id="exampleInputEmail1" />
+                                            <input
+                                                type="email"
+                                                className={`form-control border-0 bg-light rounded-end ps-1 ${(errors.email && touched.email) ? 'is-invalid' : ''}`}
+                                                placeholder="E-mail"
+                                                id="inputEmail"
+                                                name="email"
+                                                value={values.email}
+                                                onChange={handleChange}
+                                            />
+                                            <div className="invalid-feedback">{errors.email}</div>
                                         </div>
                                     </div>
                                     {/* Password */}
                                     <div className="mb-3">
-                                        <label htmlFor="inputPassword5" className="form-label">Password *</label>
                                         <div className="input-group input-group-lg">
                                             <span className="input-group-text bg-light rounded-start border-0 text-secondary px-3">🔑</span>
-                                            <input type="password" className="form-control border-0 bg-light rounded-end ps-1" placeholder="password" id="inputPassword5" />
+                                            <input
+                                                type="password"
+                                                className={`form-control border-0 bg-light rounded-end ps-1 ${(errors.password && touched.password) ? 'is-invalid' : ''}`}
+                                                placeholder="Password"
+                                                id="inputPassword"
+                                                name="password"
+                                                value={values.password}
+                                                onChange={handleChange}
+                                            />
+                                            <div className="invalid-feedback">{errors.password}</div>
                                         </div>
                                     </div>
                                     {/* telephone */}
                                     <div className="mb-4">
-                                        <label htmlFor="inputPassword5" className="form-label">Telephone *</label>
                                         <div className="input-group input-group-lg">
                                             <span className="input-group-text bg-light rounded-start border-0 text-secondary px-3">📞</span>
-                                            <input type="password" className="form-control border-0 bg-light rounded-end ps-1" placeholder="password" id="inputPassword5" />
+                                            <input
+                                                type="text"
+                                                className={`form-control border-0 bg-light rounded-end ps-1 ${(errors.telephone && touched.telephone) ? 'is-invalid' : ''}`}
+                                                placeholder="Telephone"
+                                                id="inputTelephone"
+                                                name="telephone"
+                                                value={values.telephone}
+                                                onChange={handleChange}
+                                            />
+                                            <div className="invalid-feedback">{errors.telephone}</div>
                                         </div>
                                     </div>
+
                                     {/* Button */}
                                     <div className="align-items-center mt-0">
                                         <div className="d-grid">
-                                            <button className="btn btn-dark mb-0" type="button">Register</button>
+                                            <button className="btn btn-dark mb-0" type="submit">Register</button>
                                         </div>
                                     </div>
                                 </form>
                                 {/* Sign up link */}
                                 <div className="mt-4 text-center">
-                                    <span>Already an user? <a href="#" className='fw-bold text-theme'>SignIn Here</a></span>
+                                    <span>Already have an account? <Link to={'/login'} className='fw-bold text-theme'>Sign In Here</Link></span>
                                 </div>
                             </div>
                         </div> {/* Row END */}
@@ -94,5 +137,5 @@ export default function Register() {
                 </div> {/* Row END */}
             </div>
         </section>
-    )
+    );
 }
