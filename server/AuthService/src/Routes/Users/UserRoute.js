@@ -7,5 +7,6 @@ import AdminInstCheck from '../../MiddleWare/Privileges/AdminInstCheck.js'
 
 router.get("/",UserController.test)
 router.post("/get_learners", AdminInstCheck ,validateScehma(UserYup.getAllLearners), UserController.getLearnerListById)
+router.post("/getLearnerById", AdminInstCheck ,validateScehma(UserYup.getLearnerById), UserController.getLearnerById)
 
 export default router

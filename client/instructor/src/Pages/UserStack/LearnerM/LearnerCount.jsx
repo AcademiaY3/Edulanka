@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function LearnerCount() {
+export default function LearnerCount({totalLearners,totalCourses}) {
     return (
         <div className="row g-4 mb-4">
             <div className="col-md-6">
@@ -8,7 +8,7 @@ export default function LearnerCount() {
                     <div className="d-flex justify-content-between align-items-center">
                         {/* Digit */}
                         <div>
-                            <h2 className="purecounter mb-0 fw-bold">0</h2>
+                            <h2 className="purecounter mb-0 fw-bold">{totalCourses}</h2>
                             <span className="mb-0 h4 fw-bold">Total Courses</span>
                         </div>
                         {/* Icon */}
@@ -21,7 +21,7 @@ export default function LearnerCount() {
                     <div className="d-flex justify-content-between align-items-center">
                         {/* Digit */}
                         <div>
-                            <h2 className="purecounter mb-0 fw-bold">0</h2>
+                            <h2 className="purecounter mb-0 fw-bold">{totalLearners}</h2>
                             <span className="mb-0 h4 fw-bold">Total Learners</span>
                         </div>
                         {/* Icon */}
